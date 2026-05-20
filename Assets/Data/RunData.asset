@@ -1,0 +1,61 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5baf5392258dfa842a1d148766cd1e3e, type: 3}
+  m_Name: RunData
+  m_EditorClassIdentifier: Assembly-CSharp::PlayerRunData
+  gravityStrength: -20
+  gravityScale: 2.0387359
+  fallGravityMult: 1.2
+  maxFallSpeed: 20
+  fastFallGravityMult: 20
+  maxFastFallSpeed: 10
+  walkMaxSpeed: 4
+  walkAcceleration: 0.5
+  walkAccelAmount: 6.25
+  runMaxSpeed: 8
+  runAcceleration: 1
+  runAccelAmount: 6.25
+  runDecceleration: 1.5
+  runDeccelAmount: 9.375
+  accelInAir: 1
+  deccelInAir: 1
+  doConserveMomentum: 0
+  jumpHeight: 2.5
+  jumpTimeToApex: 0.5
+  jumpForce: 10
+  jumpCutGravityMult: 1.8
+  jumpHangGravityMult: 0
+  jumpHangTimeThreshold: 0
+  jumpHangAccelerationMult: 0
+  jumpHangMaxSpeedMult: 0
+  wallJumpForce: {x: 0, y: 0}
+  wallJumpRunLerp: 0
+  wallJumpTime: 0
+  doTurnOnWallJump: 0
+  slideSpeed: -3
+  slideAccel: 5
+  slideSpeedFaster: -10
+  slideSpeedLower: -1
+  coyoteTime: 0.098
+  jumpInputBufferTime: 0.3
+  DodgeInputBufferTime: 0.2
+  AttackInputBufferTime: 0.2
+  ParryInputBufferTime: 0.2
+  dogdeDistance: 3.2
+  dogdeTime: 0.5
+  dogdeForce: 6.4
+  dogdeCooldownTime: 0.8
+  attackForce: 4
+  attackCooldownTime: 0.3
+  hurtForce: 2
+  parryForce: 8
+  parryCooldownTime: 0.3
