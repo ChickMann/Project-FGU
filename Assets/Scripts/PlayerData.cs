@@ -66,6 +66,7 @@ public class PlayerData : ScriptableObject
     [Range(0.01f, 0.5f)] public float AttackInputBufferTime;
     [Range(0.01f, 0.5f)] public float ParryInputBufferTime;
     
+    
     [Header("Dogde")]
     public float dogdeDistance;
     public float dogdeTime;
@@ -76,6 +77,7 @@ public class PlayerData : ScriptableObject
      public float attackForce;
     public float attackCooldownTime;
     public float hurtForce;
+    public float PunchCooldownTime;
     
     [Header("Parry")]
     public float parryForce;

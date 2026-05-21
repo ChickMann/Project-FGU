@@ -79,6 +79,10 @@ namespace StateSystem
             if (isHolding)
             {
                 playerController.CheckDirectionToFace();
+                if (playerController.wasPunchPresssed)
+                {
+                    context.ChangeState(context.Punch);
+                }
             }
             // if ( (animState.IsName("Attack1") || animState.IsName("Attack2") || animState.IsName("AttackUp")) && animState.normalizedTime >= 0.5f && playerController.isAttacking)
             // {

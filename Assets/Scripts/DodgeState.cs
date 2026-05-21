@@ -22,6 +22,7 @@ namespace StateSystem
             Debug.Log("Dodge Enter");
             _animator = animator;
             _animator.Play(DodgeHash, 0, 0f);
+            playerController.DodgeEffect(); 
         }
 
         public void Execute()
@@ -50,7 +51,10 @@ namespace StateSystem
             {
                 context.ChangeState(context.Attack);
             }
-      
+            if (playerController.wasPunchPresssed)
+            {
+                context.ChangeState(context.Punch);
+            }
             
         }
 

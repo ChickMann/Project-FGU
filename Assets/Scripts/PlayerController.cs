@@ -7,13 +7,6 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     
-    
- 
-    [Header("Ground Check Settings")]
-    [SerializeField] private Transform groundCheckPoint;
-    [SerializeField] private float checkRadius = 0.2f;
-    [SerializeField] private LayerMask groundLayer;
-
     [Header("Input references")]
     public InputActionReference _moveAction;
     public InputActionReference _runAction;
@@ -24,6 +17,7 @@ public class PlayerController : MonoBehaviour
     public InputActionReference _attackAction;
     public InputActionReference _hurtAction;
     public InputActionReference _deathAction;
+    public InputActionReference _PunchAction;
     
     [Header("sensors")]
     public Sensor_Prototype _groundSensor;
@@ -47,6 +41,10 @@ public class PlayerController : MonoBehaviour
     [Header("Run stop Effect")]
     public GameObject runStopEffect;
     public GameObject runStopPos;
+    
+    [Header("Dodge Effect")]
+    public GameObject dodgeEffect;
+    public GameObject dodgePos;
 
     [Header("Player Stats")] public PlayerData data;
     
@@ -55,12 +53,14 @@ public class PlayerController : MonoBehaviour
     public float LastOnGroundTime { get; private set; }
     public float LastPressedJumpTime { get; private set; }
     public float LastPressedAttackTime { get; private set; }
+    public float LastPressedPunchTime { get; private set; }
     public float LastPressedParryTime { get; private set; }
     public float LastPressedDogdeTime { get; private set; }
     public float LastPressedCrounchTime { get; private set; }
     private float _dogdeCooldownTime;
     private float _parryCooldownTime;
     private float _attackCooldownTime;
+    private float _punchCooldownTime;
     
     
     public bool isRunning { get; private set; }
@@ -80,6 +80,7 @@ public class PlayerController : MonoBehaviour
     public bool wasDodgePressed { get; private set; }
     public bool wasAttackPressed { get; private set; }
     public bool wasParryPressed { get; private set; }
+    public bool wasPunchPresssed { get; private set; }
     
     
   
@@ -132,6 +133,7 @@ public class PlayerController : MonoBehaviour
         LastPressedJumpTime -= Time.deltaTime;
         LastOnGroundTime -= Time.deltaTime;
         LastPressedAttackTime -= Time.deltaTime;
+        LastPressedPunchTime -= Time.deltaTime;
         LastPressedDogdeTime -= Time.deltaTime;
         LastPressedParryTime -= Time.deltaTime;
         
@@ -152,6 +154,8 @@ public class PlayerController : MonoBehaviour
         {
             _lastNonZeroInputX = _moveDirectionX;
         }
+
+        wasPunchPresssed = OnPunchInput();
 
         if (isFalling) isJumping = false;
         JumpCut();
@@ -216,6 +220,8 @@ public class PlayerController : MonoBehaviour
     {
         if (isGrounding && isDodging)
         {
+           
+             
             
             if (_dogdeTimeElapsed < data.dogdeTime)
             {
@@ -232,6 +238,7 @@ public class PlayerController : MonoBehaviour
                 _rigidbody.linearVelocity = new Vector2(facingDirection * currentSpeed, _rigidbody.linearVelocity.y);
             
                 _dogdeTimeElapsed += Time.fixedDeltaTime;
+                
             }
             else 
             {
@@ -241,6 +248,11 @@ public class PlayerController : MonoBehaviour
               
             }
         }
+    }
+
+    public void DodgeEffect()
+    {
+        Instantiate(dodgeEffect, dodgePos.transform.position, Quaternion.identity);
     }
 
     public void Landing()
@@ -295,6 +307,16 @@ public class PlayerController : MonoBehaviour
             _attackCooldownTime = data.attackCooldownTime;
         }
         return LastPressedAttackTime > 0;
+    }
+    public bool OnPunchInput()
+    {
+        _punchCooldownTime -= Time.deltaTime;
+        if (_PunchAction.action.WasPressedThisFrame() && _punchCooldownTime <=0)
+        {
+            LastPressedPunchTime = data.AttackInputBufferTime;
+            _punchCooldownTime = data.PunchCooldownTime;
+        }
+        return LastPressedPunchTime > 0;
     }
 
     public void AttackEffect()
@@ -369,6 +391,8 @@ public class PlayerController : MonoBehaviour
         }
         return LastPressedDogdeTime > 0 ;
     }
+
+ 
 
     public bool IsFalling()
     {

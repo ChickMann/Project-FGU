@@ -4,6 +4,7 @@ using System.Collections;
 public class Sensor_Prototype : MonoBehaviour {
 
     private int m_ColCount = 0;
+    [SerializeField] private LayerMask groundLayer;
 
     private float m_DisableTimer;
 
@@ -21,12 +22,19 @@ public class Sensor_Prototype : MonoBehaviour {
 
     void OnTriggerEnter2D(Collider2D other)
     {
-        m_ColCount++;
+        if (((1 << other.gameObject.layer) & groundLayer) != 0)
+        {
+            m_ColCount++;
+        }
     }
 
     void OnTriggerExit2D(Collider2D other)
     {
-        m_ColCount--;
+        if (((1 << other.gameObject.layer) & groundLayer) != 0)
+        {
+            m_ColCount--;
+        }
+      
     }
 
     void Update()

@@ -65,7 +65,11 @@ namespace StateSystem
             {
                 context.ChangeState(context.Death);
             }
-            
+            if (playerController.wasPunchPresssed)
+            {
+                context.ChangeState(context.Punch);
+                playerController.RunStop();
+            }
 
         }
 

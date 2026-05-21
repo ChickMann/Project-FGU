@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 5baf5392258dfa842a1d148766cd1e3e, type: 3}
-  m_Name: RunData
+  m_Name: DataPlayer
   m_EditorClassIdentifier: Assembly-CSharp::PlayerRunData
   gravityStrength: -20
   gravityScale: 2.0387359
@@ -57,5 +57,6 @@ MonoBehaviour:
   attackForce: 4
   attackCooldownTime: 0.3
   hurtForce: 2
+  PunchCooldownTime: 3
   parryForce: 8
   parryCooldownTime: 0.3

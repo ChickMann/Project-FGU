@@ -62,6 +62,10 @@ namespace StateSystem
             {
                 context.ChangeState(context.Hurt);
             }
+            if (animState.IsName("Parry")&& playerController.wasPunchPresssed)
+            {
+                context.ChangeState(context.Punch);
+            }
 
         }
 
