@@ -20,14 +20,12 @@ namespace StateSystem
 
         public void Enter(Animator animator)
         {
-            Debug.Log("Idle Enter");
             _animator = animator;
             _animator.Play(IdleHash,0,0f);
         }
 
         public void Execute()
         {
-            Debug.Log("Idle Enter");
             playerController.CheckDirectionToFace();
             if (playerController._moveDirectionX != 0)
             {
@@ -80,11 +78,16 @@ namespace StateSystem
             {
                 context.ChangeState(context.Punch);
             }
+            if (playerController.isFocus)
+            {
+                context.ChangeState(context.Focus);
+            }
+
+           
         }
 
         public void FixedExecute()
         {
-            Debug.Log("Idle Enter");
          playerController.Moving();
          playerController.SetGravityScale(playerController.data.gravityScale);
          
@@ -92,7 +95,6 @@ namespace StateSystem
 
         public void Exit()
         {
-            Debug.Log("Idle Enter");
         }
     }
 }

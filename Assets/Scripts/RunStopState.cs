@@ -19,7 +19,6 @@ namespace StateSystem
 
         public void Enter(Animator animator)
         {
-            Debug.Log("Run Stop Enter");
             _animator = animator;
             _animator.Play(RunStopHash, 0, 0f);
                 playerController.RunStop();
@@ -28,7 +27,6 @@ namespace StateSystem
 
         public void Execute()
         {
-            Debug.Log("Run Stop execute");
             playerController.CheckDirectionToFace();
             AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
             if (animState.IsName("RunStop") && animState.normalizedTime >= 1.0f)
@@ -60,7 +58,6 @@ namespace StateSystem
 
         public void Exit()
         {
-            Debug.Log("Run Stop exit");
         }
     }
 }

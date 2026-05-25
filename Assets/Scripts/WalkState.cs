@@ -20,14 +20,12 @@ namespace StateSystem
 
         public void Enter(Animator animator)
         {
-            Debug.Log("Walk Enter");
             _animator = animator;
             _animator.Play(WalkHash, 0, 0f);
         }
 
         public void Execute()
         {
-            Debug.Log("Walk execute");
             playerController.CheckDirectionToFace();
             if (playerController._moveDirectionX == 0)
             {
@@ -79,7 +77,6 @@ namespace StateSystem
 
         public void Exit()
         {
-            Debug.Log("Walk exit");
         }
     }
 }

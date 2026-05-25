@@ -1,0 +1,52 @@
+using UnityEngine;
+
+
+namespace StateSystem
+{
+
+    public class HeavyAttackState : IState
+    {
+        private static readonly int HeavyAttackHash = Animator.StringToHash("HeavyAttack");
+        private static readonly int SheathSwordHash = Animator.StringToHash("SheathSword");
+        private Animator _animator;
+
+        private PlayerStateMachine context;
+        private PlayerController playerController;
+        
+        
+        public HeavyAttackState(PlayerStateMachine context, PlayerController playerController) 
+        {
+            this.context = context;
+            this.playerController = playerController;
+        }
+        public void Enter(Animator animator)
+        {
+            _animator = animator;
+            _animator.Play(HeavyAttackHash, 0, 0f);
+        }
+
+        public void Execute()
+        {
+            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
+            
+            if (animState.IsName("HeavyAttackHold") && animState.normalizedTime >= 1.0f)
+            {
+                _animator.Play(SheathSwordHash, 0, 0f);
+            }
+            if (animState.IsName("SheathSword") && animState.normalizedTime >= 1.0f)
+            {
+                context.ChangeState(context.Idle);
+            }
+        
+        }
+
+        public void FixedExecute()
+        {
+           
+        }
+
+        public void Exit()
+        {
+        }
+    }
+}

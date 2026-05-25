@@ -23,14 +23,12 @@ namespace StateSystem
 
         public void Enter(Animator animator)
         {
-            Debug.Log("Fall Enter");
             _animator = animator;
             _animator.Play(FallHash, 0, 0f);
         }
 
         public void Execute()
         {
-            Debug.Log("Fall execute");
             
             playerController.CheckDirectionToFace();
             if (isFallCrouch && playerController.isGrounding && !isLanding)
@@ -112,7 +110,6 @@ namespace StateSystem
 
         public void Exit()
         {
-            Debug.Log("Fall exit");
             isLanding = false;
             isFallCrouch = false;
         }

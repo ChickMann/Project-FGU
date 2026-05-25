@@ -18,14 +18,12 @@ namespace StateSystem
 
         public void Enter(Animator animator)
         {
-            Debug.Log("StandUp Enter");
             _animator = animator;
             _animator.Play(StandUpHash, 0, 0f);
         }
 
         public void Execute()
         {
-            Debug.Log("StandUp execute");
           AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
           if (animState.IsName("StandUp") && animState.normalizedTime >= 1.0f)
           {
@@ -49,7 +47,6 @@ namespace StateSystem
 
         public void Exit()
         {
-            Debug.Log("StandUp exit");
         }
     }
  

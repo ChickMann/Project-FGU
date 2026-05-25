@@ -17,7 +17,8 @@ public class PlayerController : MonoBehaviour
     public InputActionReference _attackAction;
     public InputActionReference _hurtAction;
     public InputActionReference _deathAction;
-    public InputActionReference _PunchAction;
+    public InputActionReference _punchAction;
+    public InputActionReference _heavyAttackAction;
     
     [Header("sensors")]
     public Sensor_Prototype _groundSensor;
@@ -73,6 +74,8 @@ public class PlayerController : MonoBehaviour
     public bool isDeath { get; private set; }
     public bool isWallSliding { get; private set; }
     public bool isReversingDirection { get; private set; }
+    public bool isHeavyAttack { get; private set; }
+    public bool isFocus { get; private set; }
     
     
     public bool wasJumpPressed { get; private set; }
@@ -136,7 +139,9 @@ public class PlayerController : MonoBehaviour
         LastPressedPunchTime -= Time.deltaTime;
         LastPressedDogdeTime -= Time.deltaTime;
         LastPressedParryTime -= Time.deltaTime;
-        
+
+        isFocus = _heavyAttackAction.action.IsPressed();
+        isHeavyAttack = _heavyAttackAction.action.WasReleasedThisFrame();
         isDeath = _deathAction.action.IsPressed();
         _moveDirectionX = _moveAction.action.ReadValue<Vector2>().x;
         isRunning =  _runAction.action.IsPressed();
@@ -221,8 +226,6 @@ public class PlayerController : MonoBehaviour
         if (isGrounding && isDodging)
         {
            
-             
-            
             if (_dogdeTimeElapsed < data.dogdeTime)
             {
                 
@@ -238,7 +241,6 @@ public class PlayerController : MonoBehaviour
                 _rigidbody.linearVelocity = new Vector2(facingDirection * currentSpeed, _rigidbody.linearVelocity.y);
             
                 _dogdeTimeElapsed += Time.fixedDeltaTime;
-                
             }
             else 
             {
@@ -295,7 +297,6 @@ public class PlayerController : MonoBehaviour
             isFalling = false;
             _groundSensor.Disable(0.2f);
         }
-
     }
 
     public bool OnAttackInput()
@@ -308,10 +309,11 @@ public class PlayerController : MonoBehaviour
         }
         return LastPressedAttackTime > 0;
     }
+  
     public bool OnPunchInput()
     {
         _punchCooldownTime -= Time.deltaTime;
-        if (_PunchAction.action.WasPressedThisFrame() && _punchCooldownTime <=0)
+        if (_punchAction.action.WasPressedThisFrame() && _punchCooldownTime <=0)
         {
             LastPressedPunchTime = data.AttackInputBufferTime;
             _punchCooldownTime = data.PunchCooldownTime;

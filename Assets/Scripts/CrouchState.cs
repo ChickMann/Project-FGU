@@ -19,14 +19,12 @@ namespace StateSystem
 
         public void Enter(Animator animator)
         {
-            Debug.Log("Crouch Enter");
             _animator = animator;
             _animator.Play(CrouchHash, 0, 0f);
         }
 
         public void Execute()
         {
-            Debug.Log("Crouch execute");
             playerController.CheckDirectionToFace();
             if (!playerController.isCrouching)
             {
@@ -62,7 +60,6 @@ namespace StateSystem
 
         public void Exit()
         {
-            Debug.Log("Crouch exit");
         }
     }
 }

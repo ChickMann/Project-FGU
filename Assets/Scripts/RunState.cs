@@ -18,14 +18,12 @@ namespace StateSystem
 
         public void Enter(Animator animator)
         {
-            Debug.Log("Run Enter");
             _animator = animator;
             _animator.Play(RunStartHash, 0, 0f);
         }
 
         public void Execute()
         {
-            Debug.Log("Run execute");
             playerController.CheckDirectionToFace();
 
             if (playerController._moveDirectionX == 0 || !playerController.isRunning || playerController.isReversingDirection)
@@ -80,7 +78,6 @@ namespace StateSystem
 
         public void Exit()
         {
-            Debug.Log("Run exit");
         }
     }
 }

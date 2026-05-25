@@ -20,14 +20,12 @@ namespace StateSystem
 
         public void Enter(Animator animator)
         {
-            Debug.Log("Parry Enter");
             _animator = animator;
             _animator.Play(ParryStanceHash, 0, 0f);
         }
 
         public void Execute()
         {
-            Debug.Log("Parry execute");
             AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
             if (animState.IsName("ParryStance") && animState.normalizedTime >= 1.0f)
             {
@@ -66,6 +64,10 @@ namespace StateSystem
             {
                 context.ChangeState(context.Punch);
             }
+            if (animState.IsName("Parry")&& playerController.isFocus)
+            {
+                context.ChangeState(context.Focus);
+            }
 
         }
 
@@ -76,7 +78,6 @@ namespace StateSystem
 
         public void Exit()
         {
-            Debug.Log("Parry exit");
         }
     }
     

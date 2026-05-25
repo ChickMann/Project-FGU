@@ -19,7 +19,6 @@ namespace StateSystem
 
         public void Enter(Animator animator)
         {
-            Debug.Log("Dodge Enter");
             _animator = animator;
             _animator.Play(DodgeHash, 0, 0f);
             playerController.DodgeEffect(); 
@@ -27,7 +26,6 @@ namespace StateSystem
 
         public void Execute()
         {
-            Debug.Log("Dodge execute");
             AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
            
             // if (playerController.wasJumpPressed && playerController.isGrounding )
@@ -67,7 +65,6 @@ namespace StateSystem
 
         public void Exit()
         {
-            Debug.Log("Dodge exit");
         }
     }
 }

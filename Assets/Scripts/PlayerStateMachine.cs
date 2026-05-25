@@ -23,6 +23,8 @@ namespace StateSystem
         public HurtState Hurt { get; private set; }
         public DeathState Death { get; private set; }
         public PunchState Punch { get; private set; }
+        public HeavyAttackState HeavyAttack  { get; private set; }
+        public FocusState Focus { get; private set; }
         public WallSlideState WallSlide { get; private set; }
         
         public PlayerController playerController;
@@ -48,6 +50,8 @@ namespace StateSystem
             Death = new DeathState(this,playerController);
             WallSlide = new WallSlideState(this,playerController);
             Punch = new PunchState(this,playerController);
+            HeavyAttack = new HeavyAttackState(this,playerController);
+            Focus = new FocusState(this,playerController);
         }
 
         private void Start()

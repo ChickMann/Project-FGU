@@ -27,7 +27,6 @@ namespace StateSystem
 
         public void Enter(Animator animator)
         {
-            Debug.Log("Attack Enter");
             _animator = animator;
             Attacking(Attack1Hash);
             isHolding = false;
@@ -35,7 +34,6 @@ namespace StateSystem
 
         public void Execute()
         {
-            Debug.Log("Attack execute");
             AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
             if (animState.IsName("Attack1Hold") || animState.IsName("Attack2Hold")|| animState.IsName("AttackUpHold"))
             {
@@ -117,6 +115,10 @@ namespace StateSystem
             {
                 context.ChangeState(context.Death);
             }
+            if (isHolding && playerController.isFocus)
+            {
+                context.ChangeState(context.Focus);
+            }
         }
 
         public void FixedExecute()
@@ -127,18 +129,14 @@ namespace StateSystem
 
         public void Exit()
         {
-            Debug.Log("Attack exit");
             currentAttack = Attack1Hash;
             isAttacking = false;
         }
         private void Attacking(int attack)
         {
-            
                 _animator.Play(attack, 0, 0f);
                 playerController.AttackEffect();
-              
-          
-          
+
         }
     }
 }
