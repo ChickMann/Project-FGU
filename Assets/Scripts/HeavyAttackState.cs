@@ -23,6 +23,7 @@ namespace StateSystem
         {
             _animator = animator;
             _animator.Play(HeavyAttackHash, 0, 0f);
+            playerController._playerStatsManager.heavyattackStamina();  
         }
 
         public void Execute()
@@ -42,6 +43,7 @@ namespace StateSystem
 
         public void FixedExecute()
         {
+            playerController.Moving(false);
            
         }
 

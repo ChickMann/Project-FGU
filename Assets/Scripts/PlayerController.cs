@@ -86,9 +86,6 @@ public class PlayerController : MonoBehaviour
     public bool wasPunchPresssed { get; private set; }
     
     
-  
-    
-    public Rigidbody2D _rigidbody { get; private set; }
     public float _moveDirectionX { get; private set; }
 
     public int facingDirection { get; private set; }
@@ -96,10 +93,14 @@ public class PlayerController : MonoBehaviour
     private Vector2 oldVelocity;
     private float _dogdeTimeElapsed ;
     
+    [Header("refs")]
+    public Rigidbody2D _rigidbody { get; private set; }
+    public PlayerStatsManager _playerStatsManager;
+    
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
-      
+        _playerStatsManager = FindObjectOfType<PlayerStatsManager>();
     }
 
     private void Start()
@@ -201,7 +202,6 @@ public class PlayerController : MonoBehaviour
         float movement = speedDif * accelRate;
     
         _rigidbody.AddForce(movement * Vector2.right, ForceMode2D.Force);
-     
     }
 
     public bool IsWallSliding()
@@ -332,9 +332,9 @@ public class PlayerController : MonoBehaviour
     }
     public void Hurting()
     {
-        
         _rigidbody.linearVelocity = new Vector2(-facingDirection * data.hurtForce, _rigidbody.linearVelocity.y);
         _parryCooldownTime = data.parryCooldownTime;
+        
     }
 
     public void Die()

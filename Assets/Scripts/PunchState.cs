@@ -34,6 +34,7 @@ namespace StateSystem
         public void FixedExecute()
         { 
             playerController.Moving(false);
+            playerController._playerStatsManager.DecreaseStamina(0.1f);
         }
 
         public void Exit()

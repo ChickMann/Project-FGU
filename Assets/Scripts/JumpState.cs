@@ -28,6 +28,7 @@ namespace StateSystem
             _animator = animator;
             _animator.Play(JumpHash, 0, 0f);
             _isTransitioningToFall = false; // Luôn reset state khi vào lại
+            playerController._playerStatsManager.JumpStamina();
         }
 
         public void Execute() // 4. Sửa lỗi chính tả Excute -> Execute
@@ -70,6 +71,7 @@ namespace StateSystem
             playerController.Jumping();
             playerController.Moving();
             playerController.Gravity();
+           
         }
 
         public void Exit()

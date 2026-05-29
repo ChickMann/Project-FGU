@@ -49,6 +49,7 @@ namespace StateSystem
         public void FixedExecute()
         {
             playerController.WallSliding();
+            playerController._playerStatsManager.DecreaseStamina(0.1f);
         }
 
         public void Exit()

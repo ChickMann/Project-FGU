@@ -68,11 +68,16 @@ namespace StateSystem
             {
                 context.ChangeState(context.Punch);
             }
+            if (playerController.isFocus)
+            {
+                context.ChangeState(context.Focus);
+            }
         }
 
         public void FixedExecute()
         { 
             playerController.Moving();
+            playerController._playerStatsManager.IncreaseStamina(0.2f);
         }
 
         public void Exit()

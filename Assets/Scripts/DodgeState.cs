@@ -22,6 +22,7 @@ namespace StateSystem
             _animator = animator;
             _animator.Play(DodgeHash, 0, 0f);
             playerController.DodgeEffect(); 
+            playerController._playerStatsManager.dogdeStamina();
         }
 
         public void Execute()
@@ -61,6 +62,7 @@ namespace StateSystem
             playerController.Dogding();
             playerController.Moving(false);
             playerController.SetGravityScale(0);
+            
         }
 
         public void Exit()

@@ -124,7 +124,7 @@ namespace StateSystem
         public void FixedExecute()
         { 
             playerController.Moving(false);
-          
+            
         }
 
         public void Exit()
@@ -134,8 +134,9 @@ namespace StateSystem
         }
         private void Attacking(int attack)
         {
-                _animator.Play(attack, 0, 0f);
-                playerController.AttackEffect();
+            _animator.Play(attack, 0, 0f);
+            playerController.AttackEffect();
+            playerController._playerStatsManager.attackStamina();
 
         }
     }

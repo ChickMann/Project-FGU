@@ -37,7 +37,7 @@ namespace StateSystem
 
         public void FixedExecute()
         {
-
+            playerController._playerStatsManager.DecreaseStamina(0.1f);
         }
 
         public void Exit()

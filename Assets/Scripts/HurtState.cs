@@ -20,6 +20,7 @@ namespace StateSystem
         {
             _animator = animator;
             _animator.Play(HurtHash, 0, 0f);
+            playerController._playerStatsManager.hurtDame();
         }
 
         public void Execute()
@@ -42,6 +43,7 @@ namespace StateSystem
         {
             playerController.Hurting();
             playerController.Gravity();
+          
         }
 
         public void Exit()

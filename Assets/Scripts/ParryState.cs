@@ -74,6 +74,11 @@ namespace StateSystem
         public void FixedExecute()
         {
             playerController.Moving(false);
+            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
+            if (animState.IsName("Parry"))
+            {
+                playerController._playerStatsManager.IncreaseStamina(0.7f);
+            }
         }
 
         public void Exit()
