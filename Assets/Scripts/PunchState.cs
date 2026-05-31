@@ -14,12 +14,14 @@ namespace StateSystem
         {
             this.context = context;
             this.playerController = playerController;
+            
         }
 
         public void Enter(Animator animator)
         {
             _animator = animator;
             _animator.Play(PunchHash, 0, 0f);
+            playerController._playerStatsManager.punchStamina();
         }
 
         public void Execute()
@@ -34,7 +36,8 @@ namespace StateSystem
         public void FixedExecute()
         { 
             playerController.Moving(false);
-            playerController._playerStatsManager.DecreaseStamina(0.1f);
+           
+
         }
 
         public void Exit()

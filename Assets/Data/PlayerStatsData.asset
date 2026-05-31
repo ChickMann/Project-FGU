@@ -21,4 +21,4 @@ MonoBehaviour:
   heavyAttackStamina: 20
   jumpStamina: 12
   dogdeStamina: 15
-  punchStamina: 8
+  punchStamina: 10

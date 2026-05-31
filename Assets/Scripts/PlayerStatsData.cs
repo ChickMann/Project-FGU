@@ -15,4 +15,5 @@ public class PlayerStatsData: ScriptableObject
     public float heavyAttackStamina;
     public float jumpStamina;
     public float dogdeStamina;
+    public float punchStamina;
 }
