@@ -29,7 +29,7 @@ namespace StateSystem
 
         public void Execute()
         {
-            
+           
             playerController.CheckDirectionToFace();
             if (isFallCrouch && playerController.isGrounding && !isLanding)
             {

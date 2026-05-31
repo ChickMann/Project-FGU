@@ -134,9 +134,10 @@ namespace StateSystem
         }
         private void Attacking(int attack)
         {
+            playerController._playerStatsManager.attackStamina();
             _animator.Play(attack, 0, 0f);
             playerController.AttackEffect();
-            playerController._playerStatsManager.attackStamina();
+        
 
         }
     }

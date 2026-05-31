@@ -38,6 +38,11 @@ namespace StateSystem
         public void FixedExecute()
         {
             playerController._playerStatsManager.DecreaseStamina(0.1f);
+            if (playerController._playerStatsManager.IsOutStamina(playerController._playerStatsManager.StatsData
+                    .heavyAttackStamina))
+            {
+                context.ChangeState(context.HeavyAttack);
+            }
         }
 
         public void Exit()

@@ -748,7 +748,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ebea3045641d59b44b5f7f90e6126ef9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStatsManager
-  lerpSpeed: 1
+  lerpSpeed: 2
   healthSlider: {fileID: 576043433}
   staminaSlider: {fileID: 1579015507}
   easeStaminaSlider: {fileID: 464263347}
@@ -1996,7 +1996,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1051507502
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2133,7 +2133,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1173597347
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2177,8 +2177,8 @@ MonoBehaviour:
     nh\u1EA3y \nS: Ng\u1ED3i\nJ: attack\nU(hold): heavy attack\nK: parry\nL: dame\nK
     + L: parry\nI: tr\u01B0\u1EE3t\n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 081124ac350020a4fa6dc6715e5f8513, type: 2}
+  m_sharedMaterial: {fileID: 192219679758518560, guid: 081124ac350020a4fa6dc6715e5f8513, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3595,6 +3595,10 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: -1
       objectReference: {fileID: 0}
+    - target: {fileID: 1245927859286068629, guid: a66882982e1b14445b32980612f82b73, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3451757154660468715, guid: a66882982e1b14445b32980612f82b73, type: 3}
       propertyPath: m_Name
       value: Background
@@ -3696,6 +3700,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8033307156891557427, guid: 8b4ab968b19c72c43b44c3ad479ce5fc, type: 3}
+      propertyPath: _playerStatsManager
+      value: 
+      objectReference: {fileID: 494162799}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

@@ -19,10 +19,10 @@ public class PlayerStatsManager : MonoBehaviour
     [Header("Debug")]
     public float currentHealth { get; private set; }
     public float currentStamina {get; private set;}
+    
 
     private float _currentHealth;
     private float _currentStamina;
-    
     
     
     [Header("refs")]
@@ -60,8 +60,8 @@ public class PlayerStatsManager : MonoBehaviour
     private void Update()
     {
        UpdateHealthSlider();
-       
-        UpdateStaminaSlider();
+       UpdateStaminaSlider();
+       CheckOutStamina();
     }
 
 
@@ -97,6 +97,7 @@ public class PlayerStatsManager : MonoBehaviour
         {
             easeStaminaSlider.value = currentStamina;
         }
+     
     }
     
     public void DecreaseHealth(float value)
@@ -106,7 +107,7 @@ public class PlayerStatsManager : MonoBehaviour
     }
     public void DecreaseStamina(float value)
     {
-        if(currentStamina <=  StatsData.minStamina) return;
+        if(currentStamina <=  StatsData.minStamina) return ;
         currentStamina -= value;
     }
     public void IncreaseHealth(float value)
@@ -117,22 +118,23 @@ public class PlayerStatsManager : MonoBehaviour
     }
     public void IncreaseStamina(float value)
     {
-        if(currentStamina >=  StatsData.maxStamina) return;
+       
+        if(currentStamina >=  StatsData.maxStamina) return ;
         currentStamina += value;
     }
 
     public void JumpStamina()
     {
-        DecreaseStamina(StatsData.jumpStamina);
+         DecreaseStamina(StatsData.jumpStamina);
     }
     public void attackStamina()
     {
-        DecreaseStamina(StatsData.attackStamina);
+         DecreaseStamina(StatsData.attackStamina);
     }
 
     public void heavyattackStamina()
     {
-        DecreaseStamina(StatsData.heavyAttackStamina);
+         DecreaseStamina(StatsData.heavyAttackStamina);
     }
 
     public void dogdeStamina()
@@ -144,26 +146,32 @@ public class PlayerStatsManager : MonoBehaviour
     {
         DecreaseHealth(StatsData.hurtDame);
     }
-    
-    [ContextMenu("IncreaseHealth")]
-    public void IncreaseHealth10()
+
+    public void punchStamina()
     {
-        IncreaseHealth(10f);
+        DecreaseStamina(StatsData.punchStamina);
     }
-    [ContextMenu("DecreaseHealth")]
-    public void DecreaseHealth10()
+    public void CheckOutStamina()
     {
-        DecreaseHealth(10f);
-    }
-    
-    [ContextMenu("IncreaseStamina")]
-    void IncreaseStamin10()
+        if (IsOutStamina(StatsData.jumpStamina)) _playerController._jumpAction.action.Disable();
+        else _playerController._jumpAction.action.Enable();
+        
+        if (IsOutStamina(StatsData.attackStamina)) _playerController._attackAction.action.Disable();
+        else _playerController._attackAction.action.Enable();
+        
+        if (IsOutStamina(StatsData.heavyAttackStamina)) _playerController._heavyAttackAction.action.Disable();
+        else _playerController._heavyAttackAction.action.Enable();
+        
+        if (IsOutStamina(StatsData.dogdeStamina)) _playerController._dogAction.action.Disable();
+        else _playerController._dogAction.action.Enable();
+        
+        if (IsOutStamina(StatsData.punchStamina)) _playerController._punchAction.action.Disable();
+        else _playerController._punchAction.action.Enable();
+    } 
+    public bool IsOutStamina(float value)
     {
-        IncreaseStamina(10f);
+        return value > currentStamina;
     }
-    [ContextMenu("DecreaseStamina")]
-    void DecreaseStamin10()
-    {
-        DecreaseStamina(10f);
-    }
+
+  
 }

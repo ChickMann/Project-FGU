@@ -24,11 +24,11 @@ namespace StateSystem
 
         public void Enter(Animator animator)
         {
-            // Xóa Debug.Log trong bản build cuối để tối ưu CPU
+            playerController._playerStatsManager.JumpStamina();
             _animator = animator;
             _animator.Play(JumpHash, 0, 0f);
-            _isTransitioningToFall = false; // Luôn reset state khi vào lại
-            playerController._playerStatsManager.JumpStamina();
+            _isTransitioningToFall = false; 
+        
         }
 
         public void Execute() // 4. Sửa lỗi chính tả Excute -> Execute

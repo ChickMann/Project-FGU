@@ -37,7 +37,7 @@ namespace StateSystem
                 context.ChangeState(context.Crouch);
             }
 
-            if (playerController.wasJumpPressed　&& playerController.isGrounding)
+            if (playerController.wasJumpPressed　&& playerController.isGrounding )
             {
                 context.ChangeState(context.Jump);
             }
