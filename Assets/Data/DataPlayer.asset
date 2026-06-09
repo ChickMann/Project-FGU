@@ -21,11 +21,11 @@ MonoBehaviour:
   walkMaxSpeed: 4
   walkAcceleration: 0.5
   walkAccelAmount: 6.25
-  runMaxSpeed: 8
+  runMaxSpeed: 6
   runAcceleration: 1
-  runAccelAmount: 6.25
+  runAccelAmount: 8.333333
   runDecceleration: 1.5
-  runDeccelAmount: 9.375
+  runDeccelAmount: 12.5
   accelInAir: 1
   deccelInAir: 1
   doConserveMomentum: 0
@@ -56,7 +56,9 @@ MonoBehaviour:
   dogdeCooldownTime: 0.8
   attackForce: 4
   attackCooldownTime: 0.3
-  hurtForce: 2
+  hurtForce: 3
   PunchCooldownTime: 1.4
+  timeRecover: 0.03
   parryForce: 8
-  parryCooldownTime: 0.3
+  parryCooldownTime: 1.2
+  parryMulCooldownTime: 0.05

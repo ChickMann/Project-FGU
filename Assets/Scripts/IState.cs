@@ -1,8 +1,6 @@
 using UnityEngine;
 
-namespace StateSystem
-{
-    public interface IState
+public interface IState
     {
         void Enter(Animator animator);
         void Execute();
@@ -10,4 +8,4 @@ namespace StateSystem
         void Exit();
     }
 
-}
+

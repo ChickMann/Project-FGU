@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0b3d457f9f31fb74292a336919f4d6ff, type: 3}
+  m_Name: WerewolfData
+  m_EditorClassIdentifier: Assembly-CSharp::WerewolfData
+  gravityStrength: -12
+  gravityScale: 1.2232416
+  fallGravityMult: 1.2
+  maxFallSpeed: 10
+  maxFastFallSpeed: 10
+  walkMaxSpeed: 7
+  walkAcceleration: 3
+  walkAccelAmount: 21.428572
+  runMaxSpeed: 14
+  runAcceleration: 7
+  runAccelAmount: 25
+  runDecceleration: 4
+  runDeccelAmount: 14.285714
+  accelInAir: 0.43
+  deccelInAir: 0.305
+  doConserveMomentum: 1
+  attackForce: 2
+  jumpForce: 6
+  jumpTimeToApex: 0.5
+  jumpHeight: 1.5
+  jumpHangTimeThreshold: 0
+  jumpHangAccelerationMult: 0
+  jumpHangMaxSpeedMult: 0
+  dogdeDistance: 0
+  dogdeTime: 0
+  dogdeForce: NaN
+  attack2Coldown: 0
+  attack3Coldown: 0
+  attack4Coldown: 0
+  attack5Coldown: 0
