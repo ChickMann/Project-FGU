@@ -25,17 +25,29 @@ namespace WerewolfStateMachine
         public void Execute()
         {
             AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
+            if (werewolfMovement.isDeath)
+            {
+                context.ChangeState(context.Death);
+            }
             if (animState.shortNameHash == Attack5Hash && animState.normalizedTime >= 1.0f)
             {
                 
                 context.ChangeState(context.Landing);
+            }
+            if (werewolfMovement.isHurting)
+            {
+                context.ChangeState(context.Hurt);
+            }
+            if (werewolfMovement.isDeath)
+            {
+                context.ChangeState(context.Death);
             }
         }
 
         public void FixedExecute()
         {
             werewolfMovement.Dogding();
-            werewolfMovement.MovingToTarget(1.5f);
+            werewolfMovement.MovingToTarget(0);
         }
 
         public void Exit()

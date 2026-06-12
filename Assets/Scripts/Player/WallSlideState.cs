@@ -49,7 +49,7 @@ namespace StateMachinePlayer
         public void FixedExecute()
         {
             playerController.WallSliding();
-            playerController._playerStatsManager.IncreaseStamina(0.1f);
+            playerController.playerSliderBar.IncreaseStamina(0.1f);
             
         }
 

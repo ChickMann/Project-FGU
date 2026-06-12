@@ -28,13 +28,17 @@ namespace WerewolfStateMachine
         public void Execute()
         {
             werewolfMovement.CheckDirectionToFace();
+            if (werewolfMovement.isDeath)
+            {
+                context.ChangeState(context.Death);
+            }
             if (werewolfMovement.isWalking)
             {
                 context.ChangeState(context.Walk);
             }
             else if (werewolfMovement.isRunning)
             {
-                context.ChangeState(context.WalkToRun);
+                context.ChangeState(context.Run);
             }
             else if (werewolfMovement.isJumping)
             {
@@ -55,6 +59,18 @@ namespace WerewolfStateMachine
             else if (werewolfMovement.isAttack3)
             {
                 context.ChangeState(context.Attack3);
+            }
+            else if (werewolfMovement.isAttack4)
+            {
+                context.ChangeState(context.Jump);
+            }
+            else if (werewolfMovement.isAttack5)
+            {
+                context.ChangeState(context.Attack5);
+            }
+            else if (werewolfMovement.isHurting)
+            {
+                context.ChangeState(context.Hurt);
             }
         }
 

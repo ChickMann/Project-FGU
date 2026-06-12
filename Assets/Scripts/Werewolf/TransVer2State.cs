@@ -27,7 +27,8 @@ namespace WerewolfStateMachine
             AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
             if (animState.shortNameHash == TransVer2Hash && animState.normalizedTime >= 1.0f)
             {
-                context.ChangeState(context.Idle);
+                werewolfMovement.RunInput();
+                context.ChangeState(context.Run);
             }
         }
 

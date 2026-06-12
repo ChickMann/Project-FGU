@@ -23,7 +23,7 @@ namespace StateMachinePlayer
         {
             _animator = animator;
             _animator.Play(HeavyAttackHash, 0, 0f);
-            playerController._playerStatsManager.heavyattackStamina();
+            playerController.playerSliderBar.heavyattackStamina();
 
         }
 

@@ -24,7 +24,7 @@ namespace StateMachinePlayer
 
         public void Enter(Animator animator)
         {
-            playerController._playerStatsManager.JumpStamina();
+            playerController.playerSliderBar.JumpStamina();
             _animator = animator;
             _animator.Play(JumpHash, 0, 0f);
             _isTransitioningToFall = false; 

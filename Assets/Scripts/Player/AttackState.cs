@@ -131,7 +131,7 @@ namespace StateMachinePlayer
         }
         private void Attacking(int attack)
         {
-            playerController._playerStatsManager.attackStamina();
+            playerController.playerSliderBar.attackStamina();
             _animator.Play(attack, 0, 0f);
             playerController.AttackEffect();
         

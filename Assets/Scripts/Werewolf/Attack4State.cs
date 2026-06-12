@@ -25,6 +25,10 @@ namespace WerewolfStateMachine
         public void Execute()
         {
             AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
+            if (werewolfMovement.isDeath)
+            {
+                context.ChangeState(context.Death);
+            }
             if (animState.shortNameHash == Attack4Hash && animState.normalizedTime >= 1.0f)
             {
                 werewolfMovement.isJumping=false;
@@ -32,6 +36,11 @@ namespace WerewolfStateMachine
                 context.ChangeState(context.Landing);
                     
             }
+            if (werewolfMovement.isHurting)
+            {
+                context.ChangeState(context.Hurt);
+            }
+           
         }
 
         public void FixedExecute()

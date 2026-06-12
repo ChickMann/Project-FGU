@@ -22,6 +22,8 @@ namespace StateMachinePlayer
         {
             _animator = animator;
             _animator.Play(ParryStanceHash, 0, 0f);
+            playerController.SetParryColdown();
+            
         }
 
         public void Execute()
@@ -82,7 +84,7 @@ namespace StateMachinePlayer
             AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
             if (animState.IsName("Parry"))
             {
-                playerController._playerStatsManager.IncreaseStamina(0.7f);
+                playerController.playerSliderBar.IncreaseStamina(0.7f);
             }
         }
 

@@ -26,22 +26,40 @@ namespace WerewolfStateMachine
         {
             werewolfMovement.CheckDirectionToFace();
             AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
+            if (werewolfMovement.isHurting)
+            {
+                context.ChangeState(context.Hurt);
+            }
             if (animState.shortNameHash == DownHash && animState.normalizedTime >= 1.0f)
             {
-               
-                int random = Random.Range(0, 2);
-                if (random == 0)
+               werewolfMovement.RandomAttackV2();
+                if (werewolfMovement.isJumping || werewolfMovement.isAttack4)
                 {
-                    werewolfMovement.JumpInput();
                     context.ChangeState(context.Jump);
+                }
+                else if (werewolfMovement.isDodging || werewolfMovement.isAttack5)
+                {
+                    context.ChangeState(context.Attack5);
+                }
+                else if (werewolfMovement.isAttack1)
+                {
+                    context.ChangeState(context.Attack1);
+                }
+                else if (werewolfMovement.isAttack2)
+                {
+                    context.ChangeState(context.Attack2);
+                }
+                else if (werewolfMovement.isAttack3)
+                {
+                    context.ChangeState(context.Attack3);
                 }
                 else
                 {
-                    werewolfMovement.DodgeInput();
-                    context.ChangeState(context.Attack5);
+                    context.ChangeState(context.Idle);
                 }
               
             }
+            
         }
 
         public void FixedExecute()

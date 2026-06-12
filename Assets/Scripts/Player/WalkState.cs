@@ -77,7 +77,7 @@ namespace StateMachinePlayer
         public void FixedExecute()
         { 
             playerController.Moving();
-            playerController._playerStatsManager.IncreaseStamina(0.3f);
+            playerController.playerSliderBar.IncreaseStamina(0.3f);
         }
 
         public void Exit()

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2b0fe0a26a1da4543944ed59b3f32436, type: 3}
   m_Name: PlayerStatsData
   m_EditorClassIdentifier: Assembly-CSharp::PlayerStatsData
-  maxHealth: 100
+  maxHealth: 1000
   minHealth: 0
   hurtDame: 20
   maxStamina: 80

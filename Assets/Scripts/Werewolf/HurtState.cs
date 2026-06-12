@@ -20,20 +20,42 @@ namespace WerewolfStateMachine
         {
             _animator = animator;
             _animator.Play(HurtHash, 0, 0f);
+            werewolfMovement.slider.TakeDamage();
+            if (werewolfMovement.isVer2)
+            {
+                werewolfMovement.isVer2 = false;
+            }
         }
 
         public void Execute()
         {
+        
+
             AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
+            if (werewolfMovement.isDeath)
+            {
+                context.ChangeState(context.Death);
+            }
             if (animState.shortNameHash == HurtHash && animState.normalizedTime >= 1.0f)
             {
+                if (werewolfMovement.isAttack2Ready() && werewolfMovement.isPlayerNear())
+                {
+                    werewolfMovement.Atack2Input();
+                    werewolfMovement.ClearHurt();
+                    context.ChangeState(context.Attack3);
+                }
+                else
+                {
+                    werewolfMovement.ChooseNextAttack();
                 context.ChangeState(context.Idle);
-                werewolfMovement.WalkInput();
+                    
+                }
             }
         }
 
         public void FixedExecute()
         {
+            werewolfMovement.Hurting();
         }
 
         public void Exit()

@@ -20,6 +20,7 @@ namespace WerewolfStateMachine
         {
             _animator = animator;
             _animator.Play(Attack3Hash, 0, 0f);
+            werewolfMovement.StartAttack3Cooldown();
         }
 
         public void Execute()
@@ -29,7 +30,7 @@ namespace WerewolfStateMachine
             {
                 if (werewolfMovement.isPlayerNear())
                 {
-                    werewolfMovement.RandomAttack();
+                    werewolfMovement.ChooseNextAttack();
                     if (werewolfMovement.isAttack1)
                     {
                         context.ChangeState(context.Attack1);
@@ -41,6 +42,18 @@ namespace WerewolfStateMachine
                     if (werewolfMovement.isAttack3)
                     {
                         context.ChangeState(context.Attack3);
+                    }
+                    if (werewolfMovement.isAttack4)
+                    {
+                        context.ChangeState(context.Jump);
+                    }
+                    if (werewolfMovement.isAttack5)
+                    {
+                        context.ChangeState(context.Attack5);
+                    }
+                    if (werewolfMovement.isDeath)
+                    {
+                        context.ChangeState(context.Death);
                     }
                 }
                 else
@@ -58,6 +71,10 @@ namespace WerewolfStateMachine
             if (werewolfMovement.isWalking)
             {
                 context.ChangeState(context.Walk);
+            }
+            if (werewolfMovement.isHurting)
+            {
+                context.ChangeState(context.Hurt);
             }
         }
 

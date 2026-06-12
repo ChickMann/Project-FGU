@@ -90,7 +90,7 @@ namespace StateMachinePlayer
         {
          playerController.Moving(false);
          playerController.SetGravityScale(playerController.data.gravityScale);
-         playerController._playerStatsManager.IncreaseStamina(0.5f);
+         playerController.playerSliderBar.IncreaseStamina(0.5f);
         }
 
         public void Exit()

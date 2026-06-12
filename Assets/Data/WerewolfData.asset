@@ -35,10 +35,11 @@ MonoBehaviour:
   jumpHangTimeThreshold: 0
   jumpHangAccelerationMult: 0
   jumpHangMaxSpeedMult: 0
-  dogdeDistance: 0
-  dogdeTime: 0
-  dogdeForce: NaN
-  attack2Coldown: 0
-  attack3Coldown: 0
+  dogdeDistance: 4
+  dogdeTime: 7
+  dogdeForce: 0.5714286
+  hurtForce: 0.5
+  attack2Coldown: 2
+  attack3Coldown: 3
   attack4Coldown: 0
   attack5Coldown: 0

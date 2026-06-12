@@ -28,6 +28,7 @@ namespace WerewolfStateMachine
        public WalkToRunState WalkToRun { get; private set; }
        public TransVer2State TransVer2 { get; private set; }
        public HurtState Hurt { get; private set; }  
+       public DeathState Death { get; private set; }
 
        private void Awake()
        {
@@ -50,6 +51,7 @@ namespace WerewolfStateMachine
            WalkToRun = new WalkToRunState(this, _movement);
            TransVer2 = new TransVer2State(this, _movement);
            Hurt = new HurtState(this, _movement);
+           Death = new DeathState(this, _movement);
        }
 
        private void Start()
@@ -64,10 +66,17 @@ namespace WerewolfStateMachine
            _currentState.Enter(_animator);
        }
 
-       public void Update()
-       {
-           _currentState?.Execute();
-       }
+        public void Update()
+        {
+            if (!_movement.wasTransitionedToV2 && _movement.slider != null && _movement.slider.currentHealth <= _movement.slider.maxHealth * 0.5f && !_movement.isDeath)
+            {
+                _movement.wasTransitionedToV2 = true;
+                _movement.isVer2 = true;
+                ChangeState(TransVer2);
+                return;
+            }
+            _currentState?.Execute();
+        }
 
        public void FixedUpdate()
        {

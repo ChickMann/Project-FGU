@@ -20,16 +20,22 @@ namespace WerewolfStateMachine
         {
             _animator = animator;
             _animator.Play(Attack2Hash, 0, 0f);
+            werewolfMovement.StartAttack2Cooldown();
+            werewolfMovement.SetHeavyAttack(true);
         }
 
         public void Execute()
         {
             AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
+            if (werewolfMovement.isDeath)
+            {
+                context.ChangeState(context.Death);
+            }
             if (animState.shortNameHash == Attack2Hash && animState.normalizedTime >= 1.0f)
             {
                 if (werewolfMovement.isPlayerNear())
                 {
-                    werewolfMovement.RandomAttack();
+                    werewolfMovement.ChooseNextAttack();
                     if (werewolfMovement.isAttack1)
                     {
                         context.ChangeState(context.Attack1);
@@ -41,6 +47,18 @@ namespace WerewolfStateMachine
                     if (werewolfMovement.isAttack3)
                     {
                         context.ChangeState(context.Attack3);
+                    }
+                    if (werewolfMovement.isAttack4)
+                    {
+                        context.ChangeState(context.Jump);
+                    }
+                    if (werewolfMovement.isAttack5)
+                    {
+                        context.ChangeState(context.Attack5);
+                    }
+                    if (werewolfMovement.isDeath)
+                    {
+                        context.ChangeState(context.Death);
                     }
                 }
                 else
@@ -59,15 +77,18 @@ namespace WerewolfStateMachine
             {
                 context.ChangeState(context.Walk);
             }
+           
+            
         }
 
         public void FixedExecute()
         {
+            werewolfMovement.MovingToTarget(1.5f);
         }
 
         public void Exit()
         {
-           
+            werewolfMovement.SetHeavyAttack(false);
         }
     }
 }

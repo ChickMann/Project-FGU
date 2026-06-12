@@ -27,6 +27,10 @@ namespace WerewolfStateMachine
         public void Execute()
         {
             AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
+            if (werewolfMovement.isDeath)
+            {
+                context.ChangeState(context.Death);
+            }
             if (animState.shortNameHash == Attack1Hash && animState.normalizedTime >= 1.0f)
             {
                 _animator.Play(Attack12Hash,0,0f);
@@ -38,24 +42,33 @@ namespace WerewolfStateMachine
             {
                 if (werewolfMovement.isPlayerNear())
                 {
-                 werewolfMovement.RandomAttack();
-                 if (werewolfMovement.isAttack1)
-                 {
-                     context.ChangeState(context.Attack1);
-                 }
-                 if (werewolfMovement.isAttack2)
-                 {
-                     context.ChangeState(context.Attack2);
-                 }
-                 if (werewolfMovement.isAttack3)
-                 {
-                     context.ChangeState(context.Attack3);
-                 }
+                  werewolfMovement.ChooseNextAttack();
+                  if (werewolfMovement.isAttack1)
+                  {
+                      context.ChangeState(context.Attack1);
+                  }
+                  if (werewolfMovement.isAttack2)
+                  {
+                      context.ChangeState(context.Attack2);
+                  }
+                  if (werewolfMovement.isAttack3)
+                  {
+                      context.ChangeState(context.Attack3);
+                  }
+                  if (werewolfMovement.isAttack4)
+                  {
+                      context.ChangeState(context.Jump);
+                  }
+                  if (werewolfMovement.isAttack5)
+                  {
+                      context.ChangeState(context.Attack5);
+                  }
+               
                 }
                 else
                 {
-                    werewolfMovement.isAttack1 = false;
-                werewolfMovement.WalkInput();
+                    werewolfMovement.isAttack1 = false; 
+                    werewolfMovement.WalkInput();
                     
                 }
                 
@@ -69,6 +82,10 @@ namespace WerewolfStateMachine
             if (werewolfMovement.isWalking)
             {
                 context.ChangeState(context.Walk);
+            }
+            if (werewolfMovement.isHurting)
+            {
+                context.ChangeState(context.Hurt);
             }
         }
 

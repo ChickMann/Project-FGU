@@ -37,8 +37,8 @@ namespace StateMachinePlayer
 
         public void FixedExecute()
         {
-            playerController._playerStatsManager.DecreaseStamina(0.1f);
-            if (playerController._playerStatsManager.IsOutStamina(playerController._playerStatsManager.StatsData
+            playerController.playerSliderBar.DecreaseStamina(0.1f);
+            if (playerController.playerSliderBar.IsOutStamina(playerController.playerSliderBar.StatsData
                     .heavyAttackStamina))
             {
                 context.ChangeState(context.HeavyAttack);

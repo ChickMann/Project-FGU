@@ -20,7 +20,7 @@ namespace StateMachinePlayer
         {
             _animator = animator;
             _animator.Play(HurtHash, 0, 0f);
-            playerController._playerStatsManager.hurtDame();
+            playerController.playerSliderBar.hurtDame();
         }
 
         public void Execute()

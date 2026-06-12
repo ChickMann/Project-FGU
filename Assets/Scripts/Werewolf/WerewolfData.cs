@@ -46,6 +46,9 @@ public class WerewolfData : ScriptableObject
    public float dogdeTime;
    [HideInInspector] public float dogdeForce;
    
+   [Header("Hurt")]
+   public float hurtForce;
+   
    [Header("Coldown attack")]
    public float attack2Coldown;
    public float attack3Coldown;

@@ -21,7 +21,7 @@ namespace StateMachinePlayer
         {
             _animator = animator;
             _animator.Play(PunchHash, 0, 0f);
-            playerController._playerStatsManager.punchStamina();
+            playerController.playerSliderBar.punchStamina();
         }
 
         public void Execute()

@@ -37,6 +37,10 @@ namespace WerewolfStateMachine
                     
                 }
             }
+            if (werewolfMovement.isHurting)
+            {
+                context.ChangeState(context.Hurt);
+            }
           
         }
 
