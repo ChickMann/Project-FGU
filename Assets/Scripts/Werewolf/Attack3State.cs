@@ -21,10 +21,22 @@ namespace WerewolfStateMachine
             _animator = animator;
             _animator.Play(Attack3Hash, 0, 0f);
             werewolfMovement.StartAttack3Cooldown();
+            werewolfMovement.ResetConsecutiveHurt();
         }
 
         public void Execute()
         {
+            if (werewolfMovement.isDeath)
+            {
+                context.ChangeState(context.Death);
+                return;
+            }
+            if (werewolfMovement.isHurting)
+            {
+                context.ChangeState(context.Hurt);
+                return;
+            }
+
             AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
             if (animState.shortNameHash == Attack3Hash && animState.normalizedTime >= 1.0f)
             {
@@ -34,47 +46,45 @@ namespace WerewolfStateMachine
                     if (werewolfMovement.isAttack1)
                     {
                         context.ChangeState(context.Attack1);
+                        return;
                     }
                     if (werewolfMovement.isAttack2)
                     {
                         context.ChangeState(context.Attack2);
+                        return;
                     }
                     if (werewolfMovement.isAttack3)
                     {
                         context.ChangeState(context.Attack3);
+                        return;
                     }
                     if (werewolfMovement.isAttack4)
                     {
                         context.ChangeState(context.Jump);
+                        return;
                     }
                     if (werewolfMovement.isAttack5)
                     {
                         context.ChangeState(context.Attack5);
+                        return;
                     }
                     if (werewolfMovement.isDeath)
                     {
                         context.ChangeState(context.Death);
+                        return;
                     }
                 }
                 else
                 {
                     werewolfMovement.isAttack3 = false;
                     werewolfMovement.WalkInput();
-                    
                 }
-            }
-            if (werewolfMovement.isHurting)
-            {
-                context.ChangeState(context.Hurt);
             }
 
             if (werewolfMovement.isWalking)
             {
                 context.ChangeState(context.Walk);
-            }
-            if (werewolfMovement.isHurting)
-            {
-                context.ChangeState(context.Hurt);
+                return;
             }
         }
 

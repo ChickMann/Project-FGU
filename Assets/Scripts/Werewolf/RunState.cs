@@ -24,34 +24,33 @@ namespace WerewolfStateMachine
 
         public void Execute()
         {
-            werewolfMovement.CheckDirectionToFace();
-            if (!werewolfMovement.isRunning)
+            if (werewolfMovement.isDeath)
             {
-                // if (werewolfMovement.isWalking)
-                // {
-                //     context.ChangeState(context.RunToWalk);
-                // }
-                // else
-                // {
-                //     context.ChangeState(context.Idle);
-                // }
-                context.ChangeState(context.Down);
-            }
-            if (werewolfMovement.isJumping)
-            {
-                context.ChangeState(context.Jump);
-            }
-            if (werewolfMovement.isFalling)
-            {
-                context.ChangeState(context.Fall);
+                context.ChangeState(context.Death);
+                return;
             }
             if (werewolfMovement.isHurting)
             {
                 context.ChangeState(context.Hurt);
+                return;
             }
-            if (werewolfMovement.isDeath)
+
+            werewolfMovement.CheckDirectionToFace();
+
+            if (werewolfMovement.isJumping)
             {
-                context.ChangeState(context.Death);
+                context.ChangeState(context.Jump);
+                return;
+            }
+            if (werewolfMovement.isFalling)
+            {
+                context.ChangeState(context.Fall);
+                return;
+            }
+            if (!werewolfMovement.isRunning)
+            {
+                context.ChangeState(context.Down);
+                return;
             }
         }
 

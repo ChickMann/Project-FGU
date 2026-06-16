@@ -9,11 +9,7 @@ public class WerewolfData : ScriptableObject
    [HideInInspector] public float gravityStrength; 
    public float gravityScale; 
    [Space(5)]
-   public float fallGravityMult; 
-   public float maxFallSpeed;
-   public float maxFastFallSpeed; 
-   [Space(20)]
-
+  
    
    [Header("Move")]
    public float walkMaxSpeed = 5f; 
@@ -52,8 +48,6 @@ public class WerewolfData : ScriptableObject
    [Header("Coldown attack")]
    public float attack2Coldown;
    public float attack3Coldown;
-   public float attack4Coldown;
-   public float attack5Coldown;
   
    private void OnValidate()
    {

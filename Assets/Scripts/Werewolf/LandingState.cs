@@ -24,24 +24,31 @@ namespace WerewolfStateMachine
 
         public void Execute()
         {
+            if (werewolfMovement.isDeath)
+            {
+                context.ChangeState(context.Death);
+                return;
+            }
+            if (werewolfMovement.isHurting)
+            {
+                context.ChangeState(context.Hurt);
+                return;
+            }
+
             AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
             if (animState.shortNameHash == LandingHash && animState.normalizedTime >= 1.0f)
             {
                 if (werewolfMovement.isRunning)
                 {
                     context.ChangeState(context.Run);
+                    return;
                 }
                 else
                 {
-                context.ChangeState(context.Idle);
-                    
+                    context.ChangeState(context.Idle);
+                    return;
                 }
             }
-            if (werewolfMovement.isHurting)
-            {
-                context.ChangeState(context.Hurt);
-            }
-          
         }
 
         public void FixedExecute()

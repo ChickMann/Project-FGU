@@ -26,10 +26,22 @@ namespace StateMachinePlayer
 
         public void Execute()
         {
+            if (playerController.isDeath)
+            {
+                context.ChangeState(context.Death);
+                return;
+            }
+            if (playerController.wasHurted)
+            {
+                context.ChangeState(context.Hurt);
+                return;
+            }
+
             AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
-            if (animState.IsName("Throw") && animState.normalizedTime >= 0.5f)
+            if (animState.shortNameHash == PunchHash && animState.normalizedTime >= 0.5f)
             {
                 context.ChangeState(context.Idle);
+                return;
             }
         }
 

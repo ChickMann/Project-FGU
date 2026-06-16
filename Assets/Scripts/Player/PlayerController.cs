@@ -1,6 +1,4 @@
-using System;
-using StateMachinePlayer;
-using Unity.VisualScripting;
+using MoreMountains.Feedbacks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,6 +19,9 @@ public class PlayerController : MonoBehaviour
     public InputActionReference _deathAction;
     public InputActionReference _punchAction;
     public InputActionReference _heavyAttackAction;
+    
+    [Header("MM_Effect")]
+    public MMF_Player parryFeedback;
     
     [Header("sensors")]
     public Sensor_Prototype _groundSensor;
@@ -104,7 +105,7 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody2D>();
-        playerSliderBar = FindObjectOfType<PlayerSliderBar>();
+        playerSliderBar = GetComponent<PlayerSliderBar>();
     }
 
     private void Start()
@@ -207,7 +208,6 @@ public class PlayerController : MonoBehaviour
     public void Moving(bool isMoving = true)
     {
         float targetSpeed = isMoving ?  (isRunning ? _moveDirectionX * data.runMaxSpeed : _moveDirectionX * data.walkMaxSpeed):0f;
-    
         bool hasMoveInput = Mathf.Abs(targetSpeed) > 0.01f;
 
         float accelRate = (isGrounded: isGrounding, hasMoveInput) switch
@@ -360,7 +360,7 @@ public class PlayerController : MonoBehaviour
 
     public bool OnAttackInput()
     {
-        _attackCooldownTime -= Time.deltaTime;
+        _attackCooldownTime -= Time.timeScale;
         if (_attackAction.action.WasPressedThisFrame() && _attackCooldownTime <=0)
         {
             LastPressedAttackTime = data.AttackInputBufferTime;
@@ -371,7 +371,7 @@ public class PlayerController : MonoBehaviour
   
     public bool OnPunchInput()
     {
-        _punchCooldownTime -= Time.deltaTime;
+        _punchCooldownTime -= Time.unscaledDeltaTime;
         if (_punchAction.action.WasPressedThisFrame() && _punchCooldownTime <=0)
         {
             LastPressedPunchTime = data.AttackInputBufferTime;
@@ -397,9 +397,9 @@ public class PlayerController : MonoBehaviour
 
     public bool OnParryInput()
     {
-        _parryCooldownTime -= Time.deltaTime;
+        _parryCooldownTime -= Time.unscaledDeltaTime;
 
-        if (_parryAction.action.WasPressedThisFrame() && _parryCooldownTime <= 0)
+        if (_parryAction.action.WasPressedThisDynamicUpdate() && _parryCooldownTime <= 0)
         {
             LastPressedParryTime = data.ParryInputBufferTime;
             _parryCooldownTime = data.parryCooldownTime;
@@ -409,7 +409,7 @@ public class PlayerController : MonoBehaviour
 
     public bool OnDodgeInput()
     {
-        _dogdeCooldownTime -= Time.deltaTime;
+        _dogdeCooldownTime -= Time.unscaledDeltaTime;
         if (_dogAction.action.WasPressedThisFrame() && _dogdeCooldownTime <= 0)
         {
             LastPressedDogdeTime = data.DodgeInputBufferTime;
@@ -426,9 +426,13 @@ public class PlayerController : MonoBehaviour
 
     public void Parrying()
     {
+        if (parryFeedback !=null)
+        {
+            parryFeedback.PlayFeedbacks();
+        }
         successfulParryCount++;
-        _parryCooldownTime = data.parryMulCooldownTime;
         _rigidbody.linearVelocity = new Vector2(-facingDirection * data.parryForce, 0);
+        _parryCooldownTime = data.parryMulCooldownTime;
         if (parryEffect != null ) Instantiate(parryEffect, transitionEffect.transform.position, Quaternion.identity);
     }
 

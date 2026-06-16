@@ -26,27 +26,31 @@ namespace StateMachinePlayer
 
         public void Execute()
         {
-            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
-
+            if (playerController.isDeath)
+            {
+                context.ChangeState(context.Death);
+                return;
+            }
+            if (playerController.wasHurted)
+            {
+                context.ChangeState(context.Hurt);
+                return;
+            }
+            if (playerController.playerSliderBar.IsOutStamina(playerController.playerSliderBar.StatsData.heavyAttackStamina))
+            {
+                context.ChangeState(context.HeavyAttack);
+                return;
+            }
             if (playerController.isHeavyAttack)
             {
                 context.ChangeState(context.HeavyAttack);
+                return;
             }
-
         }
 
         public void FixedExecute()
         {
             playerController.playerSliderBar.DecreaseStamina(0.1f);
-            if (playerController.playerSliderBar.IsOutStamina(playerController.playerSliderBar.StatsData
-                    .heavyAttackStamina))
-            {
-                context.ChangeState(context.HeavyAttack);
-            }
-            if (playerController.wasHurted)
-            {
-                context.ChangeState(context.Hurt);
-            }
         }
 
         public void Exit()

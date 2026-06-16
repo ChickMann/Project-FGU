@@ -27,50 +27,63 @@ namespace WerewolfStateMachine
 
         public void Execute()
         {
-            werewolfMovement.CheckDirectionToFace();
             if (werewolfMovement.isDeath)
             {
                 context.ChangeState(context.Death);
+                return;
             }
+            if (werewolfMovement.isHurting)
+            {
+                context.ChangeState(context.Hurt);
+                return;
+            }
+
+            werewolfMovement.CheckDirectionToFace();
+
             if (werewolfMovement.isWalking)
             {
                 context.ChangeState(context.Walk);
+                return;
             }
-            else if (werewolfMovement.isRunning)
+            if (werewolfMovement.isRunning)
             {
                 context.ChangeState(context.Run);
+                return;
             }
-            else if (werewolfMovement.isJumping)
+            if (werewolfMovement.isJumping)
             {
                 context.ChangeState(context.Jump);
+                return;
             }
-            else if (werewolfMovement.isFalling)
+            if (werewolfMovement.isFalling)
             {
                 context.ChangeState(context.Fall);
+                return;
             }
-            else if (werewolfMovement.isAttack1)
+            if (werewolfMovement.isAttack1)
             {
                 context.ChangeState(context.Attack1);
+                return;
             }
-            else if (werewolfMovement.isAttack2)
+            if (werewolfMovement.isAttack2)
             {
                 context.ChangeState(context.Attack2);
+                return;
             }
-            else if (werewolfMovement.isAttack3)
+            if (werewolfMovement.isAttack3)
             {
                 context.ChangeState(context.Attack3);
+                return;
             }
-            else if (werewolfMovement.isAttack4)
+            if (werewolfMovement.isAttack4)
             {
                 context.ChangeState(context.Jump);
+                return;
             }
-            else if (werewolfMovement.isAttack5)
+            if (werewolfMovement.isAttack5)
             {
                 context.ChangeState(context.Attack5);
-            }
-            else if (werewolfMovement.isHurting)
-            {
-                context.ChangeState(context.Hurt);
+                return;
             }
         }
 

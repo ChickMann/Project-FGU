@@ -27,27 +27,35 @@ namespace StateMachinePlayer
 
         public void Execute()
         {
-            playerController.CheckDirectionToFace();
-            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
-            if (animState.IsName("RunStop") && animState.normalizedTime >= 1.0f)
+            if (playerController.isDeath)
             {
-                context.ChangeState(context.Idle);
-            }
-            if (animState.IsName("RunStop") && animState.normalizedTime >= 0.5f && playerController._moveDirectionX != 0)
-            {
-                context.ChangeState(context.Walk);
-            }
-            if (playerController.wasParryPressed)
-            {
-                context.ChangeState(context.Parry);
+                context.ChangeState(context.Death);
+                return;
             }
             if (playerController.wasHurted)
             {
                 context.ChangeState(context.Hurt);
+                return;
             }
-            if (playerController.isDeath)
+
+            playerController.CheckDirectionToFace();
+            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
+
+            if (playerController.wasParryPressed)
             {
-                context.ChangeState(context.Death);
+                context.ChangeState(context.Parry);
+                return;
+            }
+
+            if (animState.shortNameHash == RunStopHash && animState.normalizedTime >= 1.0f)
+            {
+                context.ChangeState(context.Idle);
+                return;
+            }
+            if (animState.shortNameHash == RunStopHash && animState.normalizedTime >= 0.5f && playerController._moveDirectionX != 0)
+            {
+                context.ChangeState(context.Walk);
+                return;
             }
         }
 

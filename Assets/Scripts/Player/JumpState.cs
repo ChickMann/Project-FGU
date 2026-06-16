@@ -31,38 +31,42 @@ namespace StateMachinePlayer
         
         }
 
-        public void Execute() // 4. Sửa lỗi chính tả Excute -> Execute
+        public void Execute() 
         {
+            if (playerController.isDeath)
+            {
+                context.ChangeState(context.Death);
+                return;
+            }
+            if (playerController.wasHurted)
+            {
+                context.ChangeState(context.Hurt);
+                return;
+            }
+
             playerController.CheckDirectionToFace();
             
-            // 5. Logic chuyển State mượt mà và an toàn
             if (playerController.isFalling  && !_isTransitioningToFall)
             {
                 _animator.Play(JumpToFallHash, 0, 0f);
                 _isTransitioningToFall = true;
             }
 
-          
             if (_isTransitioningToFall)
             {
                 AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
                 
-                if (animState.shortNameHash == JumpToFallHash && animState.normalizedTime >=  1.0f|| playerController.isGrounding)
+                if ((animState.shortNameHash == JumpToFallHash && animState.normalizedTime >= 1.0f) || playerController.isGrounding)
                 {
                     context.ChangeState(context.Fall);
+                    return;
                 }
             }
-            if (playerController.wasHurted)
-            {
-                context.ChangeState(context.Hurt);
-            }
-            if (playerController.isDeath)
-            {
-                context.ChangeState(context.Death);
-            }
-            if (playerController.isWallSliding && !playerController.isGrounding && playerController.isFalling)
+
+            if (playerController.isWallSliding && !playerController.isGrounding )
             {
                 context.ChangeState(context.WallSlide);
+                return;
             }
         }
 

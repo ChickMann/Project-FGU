@@ -19,6 +19,10 @@ namespace WerewolfStateMachine
         {
             _animator = animator;
             _animator.Play(DeathHash, 0, 0f);
+            if (werewolfMovement.deadFeedback != null)
+            {
+                werewolfMovement.deadFeedback.PlayFeedbacks();
+            }
         }
 
         public void Execute()

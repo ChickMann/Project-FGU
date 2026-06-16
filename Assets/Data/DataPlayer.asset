@@ -56,9 +56,9 @@ MonoBehaviour:
   dogdeCooldownTime: 0.8
   attackForce: 4
   attackCooldownTime: 0.3
-  hurtForce: 3
+  hurtForce: 2
   PunchCooldownTime: 1.4
   timeRecover: 0.03
   parryForce: 8
-  parryCooldownTime: 1.2
+  parryCooldownTime: 0.8
   parryMulCooldownTime: 0.05

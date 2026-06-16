@@ -5,12 +5,14 @@ public class SliderBar : MonoBehaviour
 {
     [Header("Setting")] 
     [SerializeField] private float lerpSpeed = 5f;
+    [SerializeField] private float delayDuration = 0.2f;
     
     [Header("UI")]
     public Slider sliderBar;
     public Slider easeSlider;
     
     private float targetValue;
+    private float delayTimer;
 
     public void Initialize(float maxValue, float minValue, float startValue)
     {
@@ -29,15 +31,19 @@ public class SliderBar : MonoBehaviour
         }
 
         targetValue = startValue;
+        delayTimer = 0f;
     }
 
     public void UpdateValue(float newValue)
     {
+        if (Mathf.Approximately(targetValue, newValue)) return;
+
         targetValue = newValue;
         if (sliderBar != null)
         {
             sliderBar.value = newValue;
         }
+        delayTimer = delayDuration;
     }
 
     private void Update()
@@ -46,10 +52,17 @@ public class SliderBar : MonoBehaviour
         {
             if (easeSlider.value > targetValue)
             {
-                easeSlider.value = Mathf.Lerp(easeSlider.value, targetValue, lerpSpeed * Time.deltaTime);
-                if (Mathf.Abs(easeSlider.value - targetValue) < 0.01f)
+                if (delayTimer > 0)
                 {
-                    easeSlider.value = targetValue;
+                    delayTimer -= Time.deltaTime;
+                }
+                else
+                {
+                    easeSlider.value = Mathf.Lerp(easeSlider.value, targetValue, lerpSpeed * Time.deltaTime);
+                    if (Mathf.Abs(easeSlider.value - targetValue) < 0.01f)
+                    {
+                        easeSlider.value = targetValue;
+                    }
                 }
             }
             else

@@ -24,11 +24,18 @@ namespace WerewolfStateMachine
 
         public void Execute()
         {
-            
+            if (werewolfMovement.isDeath)
+            {
+                context.ChangeState(context.Death);
+                return;
+            }
+        
+
             AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
             if (animState.shortNameHash == JumpHash && animState.normalizedTime >= 1)
             {
                 context.ChangeState(context.Attack4);
+                return;
             }
         }
 

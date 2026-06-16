@@ -24,9 +24,21 @@ namespace WerewolfStateMachine
 
         public void Execute()
         {
+            if (werewolfMovement.isDeath)
+            {
+                context.ChangeState(context.Death);
+                return;
+            }
+            if (werewolfMovement.isHurting)
+            {
+                context.ChangeState(context.Hurt);
+                return;
+            }
+
             if (werewolfMovement.isGrounding)
             {
                 context.ChangeState(context.Landing);
+                return;
             }
         }
 

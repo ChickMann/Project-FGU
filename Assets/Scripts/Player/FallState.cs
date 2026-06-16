@@ -29,7 +29,17 @@ namespace StateMachinePlayer
 
         public void Execute()
         {
-           
+            if (playerController.isDeath)
+            {
+                context.ChangeState(context.Death);
+                return;
+            }
+            if (playerController.wasHurted)
+            {
+                context.ChangeState(context.Hurt);
+                return;
+            }
+
             playerController.CheckDirectionToFace();
             if (isFallCrouch && playerController.isGrounding && !isLanding)
             {
@@ -37,66 +47,68 @@ namespace StateMachinePlayer
                 playerController.Landing();
                 isLanding = true;
             }
-            if (playerController.isGrounding & !isLanding )
+            if (playerController.isGrounding && !isLanding)
             {
                 _animator.Play(LandingHash, 0, 0f);
                 playerController.Landing();
                 isLanding = true;
             }
             AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
-            if (playerController.isGrounding && animState.IsName("Landing") && animState.normalizedTime >= 1.0f)
+            if (playerController.isGrounding && animState.shortNameHash == LandingHash && animState.normalizedTime >= 1.0f)
             {
                 context.ChangeState(context.Idle);
+                return;
             }
-            if (playerController.wasJumpPressed && playerController.isGrounding )
-            {
-                context.ChangeState(context.Jump);
-            }
-
-            if (isLanding && playerController.wasDodgePressed)
-            {
-                context.ChangeState(context.Dodge);
-            }
-            if (isLanding && playerController.isCrouching)
-            {
-                context.ChangeState(context.Crouch);
-            }
-            if (isLanding && playerController.wasAttackPressed)
-            {
-                context.ChangeState(context.Attack);
-            }
-            if (isLanding && playerController.wasParryPressed)
-            {
-                context.ChangeState(context.Parry);
-            }
-            if (isLanding && playerController.isRunning)
-            {
-                context.ChangeState(context.Run);
-            }
-            if (playerController.wasHurted)
-            {
-                context.ChangeState(context.Hurt);
-            }
-            if (playerController.isDeath)
-            {
-                context.ChangeState(context.Death);
-            }
-            if (playerController.isWallSliding && !playerController.isGrounding && playerController.isFalling)
-            {
-                context.ChangeState(context.WallSlide);
-            }
-　
-            if (Mathf.Abs(playerController._rigidbody.linearVelocity.y) >= playerController.data.maxFallSpeed *2/3 )
-            {
-                isFallCrouch = true;
-               
-            }
-
             if (animState.shortNameHash == CrouchHash && animState.normalizedTime >= 1.0f)
             {
                 context.ChangeState(context.Idle);
+                return;
             }
-        
+            if (playerController.wasJumpPressed && playerController.isGrounding)
+            {
+                context.ChangeState(context.Jump);
+                return;
+            }
+
+            if (isLanding)
+            {
+                if (playerController.wasDodgePressed)
+                {
+                    context.ChangeState(context.Dodge);
+                    return;
+                }
+                if (playerController.isCrouching)
+                {
+                    context.ChangeState(context.Crouch);
+                    return;
+                }
+                if (playerController.wasAttackPressed)
+                {
+                    context.ChangeState(context.Attack);
+                    return;
+                }
+                if (playerController.wasParryPressed)
+                {
+                    context.ChangeState(context.Parry);
+                    return;
+                }
+                if (playerController.isRunning)
+                {
+                    context.ChangeState(context.Run);
+                    return;
+                }
+            }
+
+            if (playerController.isWallSliding && !playerController.isGrounding && playerController.isFalling)
+            {
+                context.ChangeState(context.WallSlide);
+                return;
+            }
+
+            if (Mathf.Abs(playerController._rigidbody.linearVelocity.y) >= playerController.data.maxFallSpeed *2/3 )
+            {
+                isFallCrouch = true;
+            }
         }
 
         public void FixedExecute()

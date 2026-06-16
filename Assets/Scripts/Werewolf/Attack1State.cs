@@ -22,70 +22,74 @@ namespace WerewolfStateMachine
             _animator = animator;
             _animator.Play(Attack1Hash, 0, 0f);
             werewolfMovement.AttackEffect();
+            werewolfMovement.ResetConsecutiveHurt();
         }
 
         public void Execute()
         {
-            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
             if (werewolfMovement.isDeath)
             {
                 context.ChangeState(context.Death);
+                return;
             }
+            if (werewolfMovement.isHurting)
+            {
+                context.ChangeState(context.Hurt);
+                return;
+            }
+
+            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
+
             if (animState.shortNameHash == Attack1Hash && animState.normalizedTime >= 1.0f)
             {
-                _animator.Play(Attack12Hash,0,0f);
+                _animator.Play(Attack12Hash, 0, 0f);
                 werewolfMovement.CheckDirectionToFace();
                 werewolfMovement.AttackEffect();
-                
+                return;
             }
+
             if (animState.shortNameHash == Attack12Hash && animState.normalizedTime >= 1.0f)
             {
                 if (werewolfMovement.isPlayerNear())
                 {
-                  werewolfMovement.ChooseNextAttack();
-                  if (werewolfMovement.isAttack1)
-                  {
-                      context.ChangeState(context.Attack1);
-                  }
-                  if (werewolfMovement.isAttack2)
-                  {
-                      context.ChangeState(context.Attack2);
-                  }
-                  if (werewolfMovement.isAttack3)
-                  {
-                      context.ChangeState(context.Attack3);
-                  }
-                  if (werewolfMovement.isAttack4)
-                  {
-                      context.ChangeState(context.Jump);
-                  }
-                  if (werewolfMovement.isAttack5)
-                  {
-                      context.ChangeState(context.Attack5);
-                  }
-               
+                    werewolfMovement.ChooseNextAttack();
+                    if (werewolfMovement.isAttack1)
+                    {
+                        context.ChangeState(context.Attack1);
+                        return;
+                    }
+                    if (werewolfMovement.isAttack2)
+                    {
+                        context.ChangeState(context.Attack2);
+                        return;
+                    }
+                    if (werewolfMovement.isAttack3)
+                    {
+                        context.ChangeState(context.Attack3);
+                        return;
+                    }
+                    if (werewolfMovement.isAttack4)
+                    {
+                        context.ChangeState(context.Jump);
+                        return;
+                    }
+                    if (werewolfMovement.isAttack5)
+                    {
+                        context.ChangeState(context.Attack5);
+                        return;
+                    }
                 }
                 else
                 {
                     werewolfMovement.isAttack1 = false; 
                     werewolfMovement.WalkInput();
-                    
                 }
-                
-            }
-
-            if (werewolfMovement.isHurting)
-            {
-                context.ChangeState(context.Hurt);
             }
 
             if (werewolfMovement.isWalking)
             {
                 context.ChangeState(context.Walk);
-            }
-            if (werewolfMovement.isHurting)
-            {
-                context.ChangeState(context.Hurt);
+                return;
             }
         }
 

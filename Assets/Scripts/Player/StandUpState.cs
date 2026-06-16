@@ -24,20 +24,23 @@ namespace StateMachinePlayer
 
         public void Execute()
         {
-          AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
-          if (animState.IsName("StandUp") && animState.normalizedTime >= 1.0f)
-          {
-              context.ChangeState(context.Idle);
-          }
-          if (playerController.wasHurted)
-          {
-              context.ChangeState(context.Hurt);
-          }
-          if (playerController.isDeath)
-          {
-              context.ChangeState(context.Death);
-          }
+            if (playerController.isDeath)
+            {
+                context.ChangeState(context.Death);
+                return;
+            }
+            if (playerController.wasHurted)
+            {
+                context.ChangeState(context.Hurt);
+                return;
+            }
 
+            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
+            if (animState.shortNameHash == StandUpHash && animState.normalizedTime >= 1.0f)
+            {
+                context.ChangeState(context.Idle);
+                return;
+            }
         }
 
         public void FixedExecute()

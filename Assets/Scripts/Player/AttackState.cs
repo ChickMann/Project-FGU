@@ -7,14 +7,15 @@ namespace StateMachinePlayer
         private static readonly int Attack1Hash = Animator.StringToHash("Attack1");
         private static readonly int Attack2Hash = Animator.StringToHash("Attack2");
         private static readonly int AttackUpHash = Animator.StringToHash("AttackUp");
+        private static readonly int Attack1HoldHash = Animator.StringToHash("Attack1Hold");
+        private static readonly int Attack2HoldHash = Animator.StringToHash("Attack2Hold");
+        private static readonly int AttackUpHoldHash = Animator.StringToHash("AttackUpHold");
         private static readonly int SheathSwordHash = Animator.StringToHash("SheathSword");
         private Animator _animator;
 
         private PlayerStateManager context;
         private PlayerController playerController;
         
-        private bool isAttacking ;
-
         private bool isHolding;
 
         public AttackState(PlayerStateManager context, PlayerController playerController) 
@@ -32,90 +33,76 @@ namespace StateMachinePlayer
 
         public void Execute()
         {
-            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
-            if (animState.IsName("Attack1Hold") || animState.IsName("Attack2Hold")|| animState.IsName("AttackUpHold"))
+            if (playerController.isDeath)
             {
-                isHolding = true;
-            }
-            if (isHolding && animState.normalizedTime >= 1.0f)
-            {
-                _animator.Play(SheathSwordHash, 0, 0f);
-                isAttacking = false;
-            }
-            
-            
-            if ( animState.IsName("Attack1Hold")  && playerController.wasAttackPressed)
-            {
-                Attacking(Attack2Hash);
-            }
-            if (  animState.IsName("Attack2Hold")  && playerController.wasAttackPressed)
-            {
-                Attacking(AttackUpHash);
-            }
-            if (  animState.IsName("AttackUpHold")  && playerController.wasAttackPressed)
-            {
-                Attacking(Attack1Hash);
-            }
-            // if ( animState.IsName("Attack1") && animState.normalizedTime >= 0.5f && playerController.wasAttackPressed)
-            // {
-            //     Attacking(Attack2Hash);
-            // }
-            // if ( animState.IsName("Attack2") && animState.normalizedTime >= 0.5f && playerController.wasAttackPressed)
-            // {
-            //     Attacking(AttackUpHash);
-            // }
-            // if ( animState.IsName("AttackUp") && animState.normalizedTime >= 0.5f && playerController.wasAttackPressed)
-            // {
-            //     Attacking(Attack1Hash);
-            // }
-            if (isHolding && playerController.wasParryPressed)
-            {
-                context.ChangeState(context.Parry);
-            }
-            if (isHolding)
-            {
-                playerController.CheckDirectionToFace();
-                if (playerController.wasPunchPresssed)
-                {
-                    context.ChangeState(context.Punch);
-                }
-            }
-            // if ( (animState.IsName("Attack1") || animState.IsName("Attack2") || animState.IsName("AttackUp")) && animState.normalizedTime >= 0.5f && playerController.isAttacking)
-            // {
-            //     context.ChangeState(context.Attack);
-            // }
-            if (animState.IsName("SheathSword") && animState.normalizedTime >= 1.0f)
-            {
-                context.ChangeState(context.Idle);
-            }
-
-         
-            // if ( (animState.IsName("Attack1") || animState.IsName("Attack2") || animState.IsName("AttackUp")) && animState.normalizedTime >= 0.3f && playerController.isParrying)
-            // {
-            //     context.ChangeState(context.Parry);
-            // }
-           
-
-
-            if (isHolding && playerController.wasDodgePressed)
-            {
-                context.ChangeState(context.Dodge);
-            }
-            if ( isHolding && (playerController.wasJumpPressed　|| !playerController.isGrounding))
-            {
-                context.ChangeState(context.Jump);
+                context.ChangeState(context.Death);
+                return;
             }
             if (playerController.wasHurted)
             {
                 context.ChangeState(context.Hurt);
+                return;
             }
-            if (playerController.isDeath)
+
+            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
+            if (animState.shortNameHash == Attack1HoldHash || animState.shortNameHash == Attack2HoldHash || animState.shortNameHash == AttackUpHoldHash)
             {
-                context.ChangeState(context.Death);
+                isHolding = true;
             }
-            if (isHolding && playerController.isFocus)
+
+            if (animState.shortNameHash == Attack1HoldHash && playerController.wasAttackPressed)
             {
-                context.ChangeState(context.Focus);
+                Attacking(Attack2Hash);
+            }
+            else if (animState.shortNameHash == Attack2HoldHash && playerController.wasAttackPressed)
+            {
+                Attacking(AttackUpHash);
+            }
+            else if (animState.shortNameHash == AttackUpHoldHash && playerController.wasAttackPressed)
+            {
+                Attacking(Attack1Hash);
+            }
+
+            if (isHolding)
+            {
+                if (playerController.wasParryPressed)
+                {
+                    context.ChangeState(context.Parry);
+                    return;
+                }
+                if (playerController.wasDodgePressed)
+                {
+                    context.ChangeState(context.Dodge);
+                    return;
+                }
+                if (playerController.wasJumpPressed || !playerController.isGrounding)
+                {
+                    context.ChangeState(context.Jump);
+                    return;
+                }
+                if (playerController.isFocus)
+                {
+                    context.ChangeState(context.Focus);
+                    return;
+                }
+
+                playerController.CheckDirectionToFace();
+                if (playerController.wasPunchPresssed)
+                {
+                    context.ChangeState(context.Punch);
+                    return;
+                }
+
+                if (animState.normalizedTime >= 1.0f)
+                {
+                    _animator.Play(SheathSwordHash, 0, 0f);
+                }
+            }
+
+            if (animState.shortNameHash == SheathSwordHash && animState.normalizedTime >= 1.0f)
+            {
+                context.ChangeState(context.Idle);
+                return;
             }
         }
 
@@ -127,7 +114,6 @@ namespace StateMachinePlayer
 
         public void Exit()
         {
-            isAttacking = false;
         }
         private void Attacking(int attack)
         {

@@ -25,30 +25,70 @@ namespace WerewolfStateMachine
             {
                 werewolfMovement.isVer2 = false;
             }
+
+            werewolfMovement.consecutiveHurtCount++;
+            if (!werewolfMovement.isDeath && werewolfMovement.consecutiveHurtCount >= 2 && Random.value < 0.3f)
+            {
+                werewolfMovement.ClearHurt();
+                werewolfMovement.ChooseNextAttack();
+                if (werewolfMovement.isAttack1)
+                {
+                    context.ChangeState(context.Attack1);
+                }
+                else if (werewolfMovement.isAttack2)
+                {
+                    context.ChangeState(context.Attack2);
+                }
+                else if (werewolfMovement.isAttack3)
+                {
+                    context.ChangeState(context.Attack3);
+                }
+                else if (werewolfMovement.isAttack4)
+                {
+                    context.ChangeState(context.Jump);
+                }
+                else if (werewolfMovement.isAttack5)
+                {
+                    context.ChangeState(context.Attack5);
+                }
+                else
+                {
+                    context.ChangeState(context.Idle);
+                }
+            }
         }
 
         public void Execute()
         {
-        
-
-            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
             if (werewolfMovement.isDeath)
             {
                 context.ChangeState(context.Death);
+                return;
             }
+
+            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
             if (animState.shortNameHash == HurtHash && animState.normalizedTime >= 1.0f)
             {
+                if (!werewolfMovement.wasTransitionedToV2 && werewolfMovement.slider != null && werewolfMovement.slider.currentHealth <= werewolfMovement.slider.maxHealth * 0.5f)
+                {
+                    werewolfMovement.wasTransitionedToV2 = true;
+                    werewolfMovement.isVer2 = true;
+                    context.ChangeState(context.TransVer2);
+                    return;
+                }
+
                 if (werewolfMovement.isAttack2Ready() && werewolfMovement.isPlayerNear())
                 {
                     werewolfMovement.Atack2Input();
                     werewolfMovement.ClearHurt();
                     context.ChangeState(context.Attack3);
+                    return;
                 }
                 else
                 {
                     werewolfMovement.ChooseNextAttack();
-                context.ChangeState(context.Idle);
-                    
+                    context.ChangeState(context.Idle);
+                    return;
                 }
             }
         }

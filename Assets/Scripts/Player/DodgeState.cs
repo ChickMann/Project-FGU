@@ -27,38 +27,61 @@ namespace StateMachinePlayer
 
         public void Execute()
         {
-            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
-           
-            // if (playerController.wasJumpPressed && playerController.isGrounding )
-            // {
-            //     context.ChangeState(context.Jump);
-            //     playerController.resetVel();
-            // }
-            if (animState.IsName("Dodge") && animState.normalizedTime >= 0.6f && playerController.wasJumpPressed)
+            if (playerController.isDeath)
             {
-                context.ChangeState(context.Jump);
-            }
-            if (!playerController.isGrounding)
-            {
-                context.ChangeState(context.Fall);
-            }
-            if (animState.IsName("Dodge") && animState.normalizedTime >= 1f && !playerController.isDodging)
-            {
-                context.ChangeState(context.Idle);
-            }
-            if (animState.IsName("Dodge") && animState.normalizedTime >= 0.6f　&& playerController.wasAttackPressed)
-            {
-                context.ChangeState(context.Attack);
-            }
-            if (playerController.wasPunchPresssed)
-            {
-                context.ChangeState(context.Punch);
+                context.ChangeState(context.Death);
+                return;
             }
             if (playerController.wasHurted)
             {
                 context.ChangeState(context.Hurt);
+                return;
             }
-            
+
+            if (!playerController.isGrounding)
+            {
+                context.ChangeState(context.Fall);
+                return;
+            }
+
+            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
+           
+            if (animState.shortNameHash == DodgeHash)
+            {
+                if (animState.normalizedTime >= 0.6f)
+                {
+                    if (playerController.wasJumpPressed)
+                    {
+                        context.ChangeState(context.Jump);
+                        return;
+                    }
+                    if (playerController.wasAttackPressed)
+                    {
+                        context.ChangeState(context.Attack);
+                        return;
+                    }
+                }
+
+                if (animState.normalizedTime >= 1f && !playerController.isDodging)
+                {
+                    if (playerController._moveDirectionX != 0)
+                    {
+                        context.ChangeState(context.Walk);
+                        return;
+                    }
+                    else
+                    {
+                        context.ChangeState(context.Idle);
+                        return;
+                    }
+                }
+            }
+
+            if (playerController.wasPunchPresssed)
+            {
+                context.ChangeState(context.Punch);
+                return;
+            }
         }
 
         public void FixedExecute()

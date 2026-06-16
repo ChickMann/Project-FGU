@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using MoreMountains.Feedbacks;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -37,13 +38,19 @@ public class WerewolfMovement : MonoBehaviour
     [Header("event")] 
     public bool isVer2;
     public bool wasTransitionedToV2;
+    [Header("mm_effect")] 
+    public MMF_Player transver2Feedback;
+    public MMF_Player deadFeedback;
 
-    [Header("Debug")] public float timeRecover;
+    [Header("Debug")]
+     public float timeRecover;
+    public int consecutiveHurtCount;
 
 
     public int facingDirection;
     private float _dogdeTimeElapsed ;
     private float _timeHurtRecover;
+
 
     [Header("Attack Cooldowns")]
     public float attack2CooldownTimer { get; private set; }
@@ -83,7 +90,7 @@ public class WerewolfMovement : MonoBehaviour
         isGrounding = _groundSensor.State();
         RecoverHurt();
         UpdateCooldowns();
-        if(slider.IsDeath()) isDeath = true;
+        if(slider.IsDeath()) {isDeath = true;}
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -464,11 +471,17 @@ public class WerewolfMovement : MonoBehaviour
        
     }
 
+
     public void ClearHurt()
     {
         isHurting = false;
         isHurtHeavyAttack = false;
         _timeHurtRecover = timeRecover;
+    }
+
+    public void ResetConsecutiveHurt()
+    {
+        consecutiveHurtCount = 0;
     }
 
     #endregion

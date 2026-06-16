@@ -25,31 +25,38 @@ namespace StateMachinePlayer
 
         public void Execute()
         {
-            playerController.CheckDirectionToFace();
-            if (!playerController.isCrouching)
+            if (playerController.isDeath)
             {
-                context.ChangeState(context.StandUp);
-            }
-            if (playerController.wasDodgePressed)
-            {
-                context.ChangeState(context.Dodge);
-            }
-
-            if (playerController.wasParryPressed)
-            {
-                context.ChangeState(context.Parry);
-            }
-            if (playerController.wasAttackPressed)
-            {
-                context.ChangeState(context.Attack);
+                context.ChangeState(context.Death);
+                return;
             }
             if (playerController.wasHurted)
             {
                 context.ChangeState(context.Hurt);
+                return;
             }
-            if (playerController.isDeath)
+
+            playerController.CheckDirectionToFace();
+
+            if (playerController.wasDodgePressed)
             {
-                context.ChangeState(context.Death);
+                context.ChangeState(context.Dodge);
+                return;
+            }
+            if (playerController.wasParryPressed)
+            {
+                context.ChangeState(context.Parry);
+                return;
+            }
+            if (playerController.wasAttackPressed)
+            {
+                context.ChangeState(context.Attack);
+                return;
+            }
+            if (!playerController.isCrouching)
+            {
+                context.ChangeState(context.StandUp);
+                return;
             }
         }
 

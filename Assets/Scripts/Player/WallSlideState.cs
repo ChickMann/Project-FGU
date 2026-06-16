@@ -26,24 +26,28 @@ namespace StateMachinePlayer
 
         public void Execute()
         {
-            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
-            if (playerController.isGrounding || !playerController.isWallSliding )
+            if (playerController.isDeath)
             {
-                context.ChangeState(context.Idle);
-            }
-
-            if (playerController.facingDirection != playerController._moveDirectionX && 
-                playerController._moveDirectionX !=0
-                )
-            {
-                context.ChangeState(context.Fall);
+                context.ChangeState(context.Death);
+                return;
             }
             if (playerController.wasHurted)
             {
                 context.ChangeState(context.Hurt);
+                return;
             }
 
+            if (playerController.isGrounding || !playerController.isWallSliding)
+            {
+                context.ChangeState(context.Idle);
+                return;
+            }
 
+            if (playerController.facingDirection != playerController._moveDirectionX && playerController._moveDirectionX != 0)
+            {
+                context.ChangeState(context.Fall);
+                return;
+            }
         }
 
         public void FixedExecute()

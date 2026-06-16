@@ -66,17 +66,10 @@ namespace WerewolfStateMachine
            _currentState.Enter(_animator);
        }
 
-        public void Update()
-        {
-            if (!_movement.wasTransitionedToV2 && _movement.slider != null && _movement.slider.currentHealth <= _movement.slider.maxHealth * 0.5f && !_movement.isDeath)
-            {
-                _movement.wasTransitionedToV2 = true;
-                _movement.isVer2 = true;
-                ChangeState(TransVer2);
-                return;
-            }
-            _currentState?.Execute();
-        }
+       public void Update()
+       {
+           _currentState?.Execute();
+       }
 
        public void FixedUpdate()
        {
@@ -84,4 +77,3 @@ namespace WerewolfStateMachine
        }
     }
 }
-

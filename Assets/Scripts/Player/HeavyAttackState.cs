@@ -7,6 +7,7 @@ namespace StateMachinePlayer
     public class HeavyAttackState : IState
     {
         private static readonly int HeavyAttackHash = Animator.StringToHash("HeavyAttack");
+        private static readonly int HeavyAttackHoldHash = Animator.StringToHash("HeavyAttackHold");
         private static readonly int SheathSwordHash = Animator.StringToHash("SheathSword");
         private Animator _animator;
 
@@ -29,21 +30,28 @@ namespace StateMachinePlayer
 
         public void Execute()
         {
-            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
-            
-            if (animState.IsName("HeavyAttackHold") && animState.normalizedTime >= 1.0f)
+            if (playerController.isDeath)
             {
-                _animator.Play(SheathSwordHash, 0, 0f);
-            }
-            if (animState.IsName("SheathSword") && animState.normalizedTime >= 1.0f)
-            {
-                context.ChangeState(context.Idle);
+                context.ChangeState(context.Death);
+                return;
             }
             if (playerController.wasHurted)
             {
                 context.ChangeState(context.Hurt);
+                return;
             }
-        
+
+            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
+            
+            if (animState.shortNameHash == HeavyAttackHoldHash && animState.normalizedTime >= 1.0f)
+            {
+                _animator.Play(SheathSwordHash, 0, 0f);
+            }
+            if (animState.shortNameHash == SheathSwordHash && animState.normalizedTime >= 1.0f)
+            {
+                context.ChangeState(context.Idle);
+                return;
+            }
         }
 
         public void FixedExecute()

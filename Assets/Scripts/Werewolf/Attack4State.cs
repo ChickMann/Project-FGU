@@ -20,27 +20,26 @@ namespace WerewolfStateMachine
         {
             _animator = animator;
             _animator.Play(Attack4Hash, 0, 0f);
+            werewolfMovement.ResetConsecutiveHurt();
         }
 
         public void Execute()
         {
-            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
             if (werewolfMovement.isDeath)
             {
                 context.ChangeState(context.Death);
+                return;
             }
+            
+
+            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
             if (animState.shortNameHash == Attack4Hash && animState.normalizedTime >= 1.0f)
             {
-                werewolfMovement.isJumping=false;
+                werewolfMovement.isJumping = false;
                 werewolfMovement.EnableSensor();
                 context.ChangeState(context.Landing);
-                    
+                return;
             }
-            if (werewolfMovement.isHurting)
-            {
-                context.ChangeState(context.Hurt);
-            }
-           
         }
 
         public void FixedExecute()

@@ -12,26 +12,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b3d457f9f31fb74292a336919f4d6ff, type: 3}
   m_Name: WerewolfData
   m_EditorClassIdentifier: Assembly-CSharp::WerewolfData
-  gravityStrength: -12
-  gravityScale: 1.2232416
-  fallGravityMult: 1.2
-  maxFallSpeed: 10
-  maxFastFallSpeed: 10
+  gravityStrength: -10
+  gravityScale: 1.0193679
   walkMaxSpeed: 7
   walkAcceleration: 3
   walkAccelAmount: 21.428572
-  runMaxSpeed: 14
-  runAcceleration: 7
-  runAccelAmount: 25
-  runDecceleration: 4
-  runDeccelAmount: 14.285714
-  accelInAir: 0.43
+  runMaxSpeed: 13
+  runAcceleration: 8
+  runAccelAmount: 30.76923
+  runDecceleration: 3
+  runDeccelAmount: 11.538462
+  accelInAir: 0.749
   deccelInAir: 0.305
   doConserveMomentum: 1
-  attackForce: 2
-  jumpForce: 6
+  attackForce: 1.5
+  jumpForce: 5
   jumpTimeToApex: 0.5
-  jumpHeight: 1.5
+  jumpHeight: 1.25
   jumpHangTimeThreshold: 0
   jumpHangAccelerationMult: 0
   jumpHangMaxSpeedMult: 0
@@ -39,7 +36,5 @@ MonoBehaviour:
   dogdeTime: 7
   dogdeForce: 0.5714286
   hurtForce: 0.5
-  attack2Coldown: 2
-  attack3Coldown: 3
-  attack4Coldown: 0
-  attack5Coldown: 0
+  attack2Coldown: 8
+  attack3Coldown: 12

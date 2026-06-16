@@ -20,10 +20,21 @@ namespace WerewolfStateMachine
         {
             _animator = animator;
             _animator.Play(TransVer2Hash, 0, 0f);
+            werewolfMovement.ClearHurt();
+            if (werewolfMovement.transver2Feedback != null)
+            {
+                werewolfMovement.transver2Feedback.PlayFeedbacks();
+            }
         }
 
         public void Execute()
         {
+            if (werewolfMovement.isDeath)
+            {
+                context.ChangeState(context.Death);
+                return;
+            }
+
             AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
             if (animState.shortNameHash == TransVer2Hash && animState.normalizedTime >= 1.0f)
             {

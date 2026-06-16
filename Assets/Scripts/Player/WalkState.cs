@@ -26,51 +26,69 @@ namespace StateMachinePlayer
 
         public void Execute()
         {
-            playerController.CheckDirectionToFace();
-            if (playerController._moveDirectionX == 0)
+            if (playerController.isDeath)
             {
-                context.ChangeState(context.Idle);
-            }
-
-            if (playerController.isRunning && playerController._moveDirectionX != 0)
-            {
-                context.ChangeState(context.Run);
-            }
-            if (playerController.wasJumpPressed　|| !playerController.isGrounding)
-            {
-                context.ChangeState(context.Jump);
-            }
-            if (playerController.isCrouching)
-            {
-                context.ChangeState(context.Crouch);
-            }
-            if (playerController.wasParryPressed)
-            {
-                context.ChangeState(context.Parry);
-            }
-            if (playerController.wasAttackPressed)
-            {
-                context.ChangeState(context.Attack);
-            }
-            if (playerController.wasDodgePressed)
-            {
-                context.ChangeState(context.Dodge);
+                context.ChangeState(context.Death);
+                return;
             }
             if (playerController.wasHurted)
             {
                 context.ChangeState(context.Hurt);
+                return;
             }
-            if (playerController.isDeath)
+
+            if (!playerController.isGrounding)
             {
-                context.ChangeState(context.Death);
+                context.ChangeState(context.Fall);
+                return;
+            }
+
+            playerController.CheckDirectionToFace();
+
+            if (playerController.wasJumpPressed && playerController.isGrounding)
+            {
+                context.ChangeState(context.Jump);
+                return;
+            }
+            if (playerController.wasDodgePressed)
+            {
+                context.ChangeState(context.Dodge);
+                return;
+            }
+            if (playerController.wasParryPressed)
+            {
+                context.ChangeState(context.Parry);
+                return;
+            }
+            if (playerController.wasAttackPressed)
+            {
+                context.ChangeState(context.Attack);
+                return;
             }
             if (playerController.wasPunchPresssed)
             {
                 context.ChangeState(context.Punch);
+                return;
             }
             if (playerController.isFocus)
             {
                 context.ChangeState(context.Focus);
+                return;
+            }
+            if (playerController.isRunning && playerController._moveDirectionX != 0)
+            {
+                context.ChangeState(context.Run);
+                return;
+            }
+            if (playerController._moveDirectionX == 0)
+            {
+                context.ChangeState(context.Idle);
+                return;
+            }
+            if (playerController.isCrouching)
+            {
+                context.ChangeState(context.Crouch);
+                return;
             }
         }
 

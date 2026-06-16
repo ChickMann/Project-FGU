@@ -24,42 +24,54 @@ namespace WerewolfStateMachine
 
         public void Execute()
         {
-            werewolfMovement.CheckDirectionToFace();
-            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
+            if (werewolfMovement.isDeath)
+            {
+                context.ChangeState(context.Death);
+                return;
+            }
             if (werewolfMovement.isHurting)
             {
                 context.ChangeState(context.Hurt);
+                return;
             }
+
+            werewolfMovement.CheckDirectionToFace();
+            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
+
             if (animState.shortNameHash == DownHash && animState.normalizedTime >= 1.0f)
             {
-               werewolfMovement.RandomAttackV2();
+                werewolfMovement.RandomAttackV2();
                 if (werewolfMovement.isJumping || werewolfMovement.isAttack4)
                 {
                     context.ChangeState(context.Jump);
+                    return;
                 }
                 else if (werewolfMovement.isDodging || werewolfMovement.isAttack5)
                 {
                     context.ChangeState(context.Attack5);
+                    return;
                 }
                 else if (werewolfMovement.isAttack1)
                 {
                     context.ChangeState(context.Attack1);
+                    return;
                 }
                 else if (werewolfMovement.isAttack2)
                 {
                     context.ChangeState(context.Attack2);
+                    return;
                 }
                 else if (werewolfMovement.isAttack3)
                 {
                     context.ChangeState(context.Attack3);
+                    return;
                 }
                 else
                 {
                     context.ChangeState(context.Idle);
+                    return;
                 }
-              
             }
-            
         }
 
         public void FixedExecute()

@@ -28,9 +28,9 @@ namespace StateMachinePlayer
             if (animState.shortNameHash == DeathHash && animState.normalizedTime >= 1.0f && playerController._moveDirectionX !=0)
             {
                 context.ChangeState(context.Walk);
+                return;
             }
 
-         
         }
 
         public void FixedExecute()
