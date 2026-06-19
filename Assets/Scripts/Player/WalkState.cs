@@ -22,6 +22,7 @@ namespace StateMachinePlayer
         {
             _animator = animator;
             _animator.Play(WalkHash, 0, 0f);
+       
         }
 
         public void Execute()
@@ -94,6 +95,10 @@ namespace StateMachinePlayer
 
         public void FixedExecute()
         { 
+            if (playerController.footstepFeedback != null && !playerController.footstepFeedback.IsPlaying)
+            {
+                playerController.footstepFeedback.PlayFeedbacks();
+            }
             playerController.Moving();
             playerController.playerSliderBar.IncreaseStamina(0.3f);
         }

@@ -21,6 +21,11 @@ namespace StateMachinePlayer
             _animator = animator;
             _animator.Play(HurtHash, 0, 0f);
             playerController.playerSliderBar.hurtDame();
+            if (playerController.hurtFeedback != null)
+            {
+                playerController.hurtFeedback.PlayFeedbacks();
+            }
+            
         }
 
         public void Execute()

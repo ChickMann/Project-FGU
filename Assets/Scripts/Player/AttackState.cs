@@ -95,6 +95,10 @@ namespace StateMachinePlayer
 
                 if (animState.normalizedTime >= 1.0f)
                 {
+                    if (playerController.sheathSwordFeedback != null && !playerController.sheathSwordFeedback.IsPlaying)
+                    {
+                        playerController.sheathSwordFeedback.PlayFeedbacks();
+                    }
                     _animator.Play(SheathSwordHash, 0, 0f);
                 }
             }
@@ -117,6 +121,10 @@ namespace StateMachinePlayer
         }
         private void Attacking(int attack)
         {
+            if (playerController.attackFeedback != null)
+            {
+                playerController.attackFeedback.PlayFeedbacks();
+            }
             playerController.playerSliderBar.attackStamina();
             _animator.Play(attack, 0, 0f);
             playerController.AttackEffect();

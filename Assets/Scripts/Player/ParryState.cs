@@ -23,7 +23,10 @@ namespace StateMachinePlayer
             _animator = animator;
             _animator.Play(ParryStanceHash, 0, 0f);
             playerController.SetParryColdown();
-         
+            if(playerController.parryStandFeedback != null)
+            {
+                playerController.parryStandFeedback.PlayFeedbacks();
+            }
             
         }
 
@@ -50,11 +53,19 @@ namespace StateMachinePlayer
 
             if (animState.shortNameHash == ParryStanceHash && animState.normalizedTime >= 1.0f)
             {
+                if (playerController.sheathSwordFeedback != null)
+                {
+                    playerController.sheathSwordFeedback.PlayFeedbacks();
+                }
                 _animator.Play(SheathSwordHash, 0, 0f);
             }
 
             if (animState.shortNameHash == ParryHash && animState.normalizedTime >= 1.0f)
             {
+                if (playerController.sheathSwordFeedback != null)
+                {
+                    playerController.sheathSwordFeedback.PlayFeedbacks();
+                }
                 _animator.Play(SheathSwordHash, 0, 0f);
             }
 

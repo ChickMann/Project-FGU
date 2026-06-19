@@ -52,6 +52,7 @@ namespace StateMachinePlayer
                 context.ChangeState(context.Idle);
                 return;
             }
+         
         }
 
         public void FixedExecute()

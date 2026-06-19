@@ -1,3 +1,4 @@
+using System;
 using MoreMountains.Feedbacks;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -22,6 +23,13 @@ public class PlayerController : MonoBehaviour
     
     [Header("MM_Effect")]
     public MMF_Player parryFeedback;
+    public MMF_Player attackFeedback;
+    public MMF_Player hurtFeedback;
+    public MMF_Player deathFeedback;
+    public MMF_Player dodgeFeedback;
+    public MMF_Player sheathSwordFeedback;
+    public MMF_Player footstepFeedback;
+    public MMF_Player parryStandFeedback;
     
     [Header("sensors")]
     public Sensor_Prototype _groundSensor;
@@ -177,7 +185,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerStay2D(Collider2D other)
     {
         if (other.gameObject.CompareTag("Hit Box") && !wasHurted)
         {
@@ -201,12 +209,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+   
+
     #endregion
 
     #region Movement & Physics
 
     public void Moving(bool isMoving = true)
     {
+       
         float targetSpeed = isMoving ?  (isRunning ? _moveDirectionX * data.runMaxSpeed : _moveDirectionX * data.walkMaxSpeed):0f;
         bool hasMoveInput = Mathf.Abs(targetSpeed) > 0.01f;
 
@@ -471,6 +482,10 @@ public class PlayerController : MonoBehaviour
 
     public void DodgeEffect()
     {
+        if (dodgeFeedback != null)
+        {
+            dodgeFeedback.PlayFeedbacks();
+        }
         Instantiate(dodgeEffect, dodgePos.transform.position, Quaternion.identity);
     }
 
