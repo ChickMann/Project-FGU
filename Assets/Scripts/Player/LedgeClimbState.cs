@@ -1,27 +1,29 @@
-using StateMachinePlayer;
 using UnityEngine;
-
 
 namespace StateMachinePlayer
 {
-    public class WallSlideState : IState
+    public class LedgeClimbState : IState
     {
-        private static readonly int WallSlideHash = Animator.StringToHash("WallSlide");
+        private static readonly int LedgeClimbHash = Animator.StringToHash("LedgeClimb");
         private Animator _animator;
 
         private PlayerStateManager context;
         private PlayerController playerController;
-        
-        public WallSlideState(PlayerStateManager context, PlayerController playerController) 
+
+        public LedgeClimbState(PlayerStateManager context, PlayerController playerController)
         {
             this.context = context;
             this.playerController = playerController;
         }
+
         public void Enter(Animator animator)
         {
             _animator = animator;
-            _animator.Play(WallSlideHash, 0, 0f);
+            _animator.Play(LedgeClimbHash, 0, 0f);
+
+            playerController._rigidbody.linearVelocity = Vector2.zero;
             playerController.SetGravityScale(0);
+            playerController.DisableWallSensors();
         }
 
         public void Execute()
@@ -33,35 +35,27 @@ namespace StateMachinePlayer
             }
             if (playerController.wasHurted)
             {
+                playerController.SetGravityScale(playerController.data.gravityScale);
                 context.ChangeState(context.Hurt);
                 return;
             }
 
-
-            if (playerController.isGrounding || !playerController.isWallSliding)
+            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
+            if (animState.shortNameHash == LedgeClimbHash && animState.normalizedTime >= 1.0f)
             {
                 context.ChangeState(context.Idle);
-                return;
-            }
-
-            if (playerController.facingDirection != playerController._moveDirectionX && playerController._moveDirectionX != 0)
-            {
-                context.ChangeState(context.Fall);
                 return;
             }
         }
 
         public void FixedExecute()
         {
-            playerController.WallSliding();
-            playerController.playerSliderBar.IncreaseStamina(0.1f);
-            
+            playerController.SetGravityScale(0);
+            playerController._rigidbody.linearVelocity = Vector2.zero;
         }
 
         public void Exit()
         {
         }
     }
-
 }
-

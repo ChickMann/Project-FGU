@@ -1,26 +1,28 @@
-using StateMachinePlayer;
 using UnityEngine;
-
 
 namespace StateMachinePlayer
 {
-    public class WallSlideState : IState
+    public class GrabLedgeState : IState
     {
-        private static readonly int WallSlideHash = Animator.StringToHash("WallSlide");
+        private static readonly int LedgeGrabHash = Animator.StringToHash("LedgeGrab");
         private Animator _animator;
 
         private PlayerStateManager context;
         private PlayerController playerController;
-        
-        public WallSlideState(PlayerStateManager context, PlayerController playerController) 
+
+        public GrabLedgeState(PlayerStateManager context, PlayerController playerController)
         {
             this.context = context;
             this.playerController = playerController;
         }
+
         public void Enter(Animator animator)
         {
             _animator = animator;
-            _animator.Play(WallSlideHash, 0, 0f);
+            _animator.Play(LedgeGrabHash, 0, 0f);
+            
+            // Cancel movement velocity and gravity when grabbing the ledge
+            playerController._rigidbody.linearVelocity = Vector2.zero;
             playerController.SetGravityScale(0);
         }
 
@@ -33,19 +35,22 @@ namespace StateMachinePlayer
             }
             if (playerController.wasHurted)
             {
+                playerController.SetGravityScale(playerController.data.gravityScale);
                 context.ChangeState(context.Hurt);
                 return;
             }
 
+            // Read vertical move direction
+            float moveDirectionY = playerController._moveAction.action.ReadValue<Vector2>().y;
 
-            if (playerController.isGrounding || !playerController.isWallSliding)
+            if (moveDirectionY > 0.1f || playerController.wasJumpPressed)
             {
-                context.ChangeState(context.Idle);
+                context.ChangeState(context.LedgeClimb);
                 return;
             }
-
-            if (playerController.facingDirection != playerController._moveDirectionX && playerController._moveDirectionX != 0)
+            else if (moveDirectionY < -0.1f)
             {
+                playerController.DisableWallSensors();
                 context.ChangeState(context.Fall);
                 return;
             }
@@ -53,15 +58,12 @@ namespace StateMachinePlayer
 
         public void FixedExecute()
         {
-            playerController.WallSliding();
-            playerController.playerSliderBar.IncreaseStamina(0.1f);
-            
+            playerController._rigidbody.linearVelocity = Vector2.zero;
+            playerController.playerSliderBar.IncreaseStamina(0.3f);
         }
 
         public void Exit()
         {
         }
     }
-
 }
-

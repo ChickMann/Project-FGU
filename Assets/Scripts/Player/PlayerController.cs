@@ -85,6 +85,7 @@ public class PlayerController : MonoBehaviour
     public bool isReversingDirection { get; private set; }
     public bool isHeavyAttack { get; private set; }
     public bool isFocus { get; private set; }
+    public bool isGrabbing { get; private set; }
     
     public bool wasJumpPressed { get; private set; }
     public bool wasHurted { get; private set; }
@@ -101,6 +102,7 @@ public class PlayerController : MonoBehaviour
     private float _lastNonZeroInputX = 1f;
     private float _dogdeTimeElapsed ;
     private float _timeHurtRecover;
+    public Vector3 climbPosition { get; set; }
     
     [Header("refs")]
     public Rigidbody2D _rigidbody { get; private set; }
@@ -183,6 +185,7 @@ public class PlayerController : MonoBehaviour
         {
             isDeath = true;
         }
+        isGrabbing = IsGrabbing();
     }
 
     private void OnTriggerStay2D(Collider2D other)
@@ -258,7 +261,6 @@ public class PlayerController : MonoBehaviour
         float slideSpeed = isCrouching ? data.slideSpeedFaster : _jumpAction.action.IsPressed()? data.slideSpeedLower : data.slideSpeed;
         
         float speedDif = slideSpeed - _rigidbody.linearVelocity.y;	
-        Debug.Log("Wall sliding: " + _rigidbody.linearVelocity.y + " " + speedDif );
         float movement = speedDif * data.slideAccel;
         movement = Mathf.Clamp(movement, -Mathf.Abs(speedDif)  * (1 / Time.fixedDeltaTime), Mathf.Abs(speedDif) * (1 / Time.fixedDeltaTime));
         _rigidbody.AddForce(movement * Vector2.up);
@@ -283,6 +285,11 @@ public class PlayerController : MonoBehaviour
                 isDodging = false;
             }
         }
+    }
+
+    private bool IsGrabbing()
+    {
+        return _wallSensorR2.State() || _wallSensorR1.State() || _wallSensorL2.State() || _wallSensorL1.State();
     }
 
     public void Jumping()
@@ -539,6 +546,81 @@ public class PlayerController : MonoBehaviour
     public void SetParryColdown()
     {
         _parryCooldownTime = data.parryCooldownTime;
+    }
+
+    public GrabableLedge GetGrabableLedge()
+    {
+        if (isGrabbing)
+        {
+            Vector3 rayStart;
+            if (facingDirection == 1)
+                rayStart = _wallSensorR2.transform.position + new Vector3(0.2f, 0.0f, 0.0f);
+            else
+                rayStart = _wallSensorL2.transform.position - new Vector3(0.6f, 0.0f, 0.0f);
+
+            var hit = Physics2D.Raycast(rayStart, Vector2.down, 1.0f);
+            if (hit)
+            {
+                return hit.transform.GetComponent<GrabableLedge>();
+            }
+        }
+        return null;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (_wallSensorR2 != null && _wallSensorL2 != null)
+        {
+            if (facingDirection == 1)
+            {
+                // Right side raycast check & visualization
+                Vector3 rightRayStart = _wallSensorR2.transform.position + new Vector3(0.2f, 0.0f, 0.0f);
+                var rightHit = Physics2D.Raycast(rightRayStart, Vector2.down, 1.0f);
+                bool rightLedgeDetected = rightHit && rightHit.transform.GetComponent<GrabableLedge>() != null;
+
+                Gizmos.color = rightLedgeDetected ? Color.green : Color.red;
+                Gizmos.DrawLine(rightRayStart, rightRayStart + Vector3.down * 1.0f);
+                Gizmos.DrawWireSphere(rightRayStart, 0.05f);
+            }
+            else if  (facingDirection == -1)
+            {
+                // Left side raycast check & visualization
+                Vector3 leftRayStart = _wallSensorL2.transform.position - new Vector3(0.6f, 0.0f, 0.0f);
+                var leftHit = Physics2D.Raycast(leftRayStart, Vector2.down, 1.0f);
+                bool leftLedgeDetected = leftHit && leftHit.transform.GetComponent<GrabableLedge>() != null;
+
+                Gizmos.color = leftLedgeDetected ? Color.green : Color.red;
+                Gizmos.DrawLine(leftRayStart, leftRayStart + Vector3.down * 1.0f);
+                Gizmos.DrawWireSphere(leftRayStart, 0.05f);
+            }
+            
+         
+        }
+    }
+
+    public void SetPositionToClimbPosition()
+    {
+        transform.position = climbPosition;
+        SetGravityScale(data.gravityScale);
+        _wallSensorR1.Disable(3.0f / 14.0f);
+        _wallSensorR2.Disable(3.0f / 14.0f);
+        _wallSensorL1.Disable(3.0f / 14.0f);
+        _wallSensorL2.Disable(3.0f / 14.0f);
+    }
+
+    public void DisableWallSensors()
+    {
+        _wallSensorR1.Disable(0.8f);
+        _wallSensorR2.Disable(0.8f);
+        _wallSensorL1.Disable(0.8f);
+        _wallSensorL2.Disable(0.8f);
+        SetGravityScale(data.gravityScale);
+    }
+
+    // Animation Event receiver called by Unity's Animator
+    public void AE_setPositionToClimbPosition()
+    {
+        SetPositionToClimbPosition();
     }
 
     #endregion

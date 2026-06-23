@@ -26,6 +26,8 @@ namespace StateMachinePlayer
         public HeavyAttackState HeavyAttack  { get; private set; }
         public FocusState Focus { get; private set; }
         public WallSlideState WallSlide { get; private set; }
+        public GrabLedgeState GrabLedge { get; private set; }
+        public LedgeClimbState LedgeClimb { get; private set; }
         
         public PlayerController playerController;
 
@@ -52,6 +54,8 @@ namespace StateMachinePlayer
             Punch = new PunchState(this,playerController);
             HeavyAttack = new HeavyAttackState(this,playerController);
             Focus = new FocusState(this,playerController);
+            GrabLedge = new GrabLedgeState(this,playerController);
+            LedgeClimb = new LedgeClimbState(this,playerController);
         }
 
         private void Start()

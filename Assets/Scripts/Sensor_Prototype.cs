@@ -6,6 +6,7 @@ public class Sensor_Prototype : MonoBehaviour {
 
     private int m_ColCount = 0;
     [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private bool isTrigger;
 
     private float m_DisableTimer;
 
@@ -23,20 +24,41 @@ public class Sensor_Prototype : MonoBehaviour {
 
     private void OnCollisionEnter2D(Collision2D other)
     {
+        if(isTrigger) return;
         if (((1 << other.gameObject.layer) & groundLayer) != 0)
         {
             m_ColCount++;
         }
     }
 
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if(!isTrigger) return;
+        if (((1 << other.gameObject.layer) & groundLayer) != 0)
+        {
+            m_ColCount++;
+        }
+    }
+
+   
+
+
     private void OnCollisionExit2D(Collision2D other)
     {
+        if(isTrigger) return;
         if (((1 << other.gameObject.layer) & groundLayer) != 0)
         {
             m_ColCount--;
         }
     }
-
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if(!isTrigger) return;
+        if (((1 << other.gameObject.layer) & groundLayer) != 0)
+        {
+            m_ColCount--;
+        }
+    }
  
     void Update()
     {

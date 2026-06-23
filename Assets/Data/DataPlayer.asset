@@ -21,11 +21,11 @@ MonoBehaviour:
   walkMaxSpeed: 4
   walkAcceleration: 0.5
   walkAccelAmount: 6.25
-  runMaxSpeed: 6
-  runAcceleration: 1
-  runAccelAmount: 8.333333
+  runMaxSpeed: 8
+  runAcceleration: 1.5
+  runAccelAmount: 9.375
   runDecceleration: 1.5
-  runDeccelAmount: 12.5
+  runDeccelAmount: 9.375
   accelInAir: 1
   deccelInAir: 1
   doConserveMomentum: 0
