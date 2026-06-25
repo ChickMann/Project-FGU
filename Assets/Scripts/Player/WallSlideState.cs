@@ -55,11 +55,12 @@ namespace StateMachinePlayer
         {
             playerController.WallSliding();
             playerController.playerSliderBar.IncreaseStamina(0.1f);
-            
         }
 
         public void Exit()
         {
+            if(playerController.playerFeedbackManager !=null) playerController.playerFeedbackManager.StopFeedback(PlayerFeedbackType.Wall_slide);
+            
         }
     }
 

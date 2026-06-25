@@ -95,10 +95,6 @@ namespace StateMachinePlayer
 
         public void FixedExecute()
         { 
-            if (playerController.footstepFeedback != null && !playerController.footstepFeedback.IsPlaying)
-            {
-                playerController.footstepFeedback.PlayFeedbacks();
-            }
             playerController.Moving();
             playerController.playerSliderBar.IncreaseStamina(0.3f);
         }

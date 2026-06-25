@@ -13,8 +13,8 @@ public class WerewolfMovement : MonoBehaviour
     public GameObject target;
     public WerewolfSliderBar slider;
     
-    [Header("sensors")]
-    public Sensor_Prototype _groundSensor;
+    [Header("Sensors")]
+    public WerewolfSensorManager werewolfSensorManager;
     private Rigidbody2D _rigidbody;
     
     [Header("movement")]
@@ -69,6 +69,9 @@ public class WerewolfMovement : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         slider = GetComponent<WerewolfSliderBar>();
+        
+        if (werewolfSensorManager == null)
+            werewolfSensorManager = GetComponent<WerewolfSensorManager>();
     }
 
     void Start()
@@ -87,7 +90,10 @@ public class WerewolfMovement : MonoBehaviour
 
     void Update()
     {
-        isGrounding = _groundSensor.State();
+        if (werewolfSensorManager != null)
+        {
+            isGrounding = werewolfSensorManager.groundSensor.State();
+        }
         RecoverHurt();
         UpdateCooldowns();
         if(slider.IsDeath()) {isDeath = true;}
@@ -175,7 +181,7 @@ public class WerewolfMovement : MonoBehaviour
         
             _rigidbody.AddForce(Vector2.up * force, ForceMode2D.Impulse);
             isFalling = false;
-            _groundSensor.Disable(0.2f);
+            if (werewolfSensorManager != null) werewolfSensorManager.groundSensor.Disable(0.2f);
         }
     }
 
@@ -439,12 +445,14 @@ public class WerewolfMovement : MonoBehaviour
 
     public void DisableSensor()
     {
-        _groundSensor.gameObject.SetActive(false);
+        if (werewolfSensorManager != null && werewolfSensorManager.groundSensor != null)
+            werewolfSensorManager.groundSensor.gameObject.SetActive(false);
     }
 
     public void EnableSensor()
     {
-        _groundSensor.gameObject.SetActive(true);
+        if (werewolfSensorManager != null && werewolfSensorManager.groundSensor != null)
+            werewolfSensorManager.groundSensor.gameObject.SetActive(true);
     }
 
     #endregion

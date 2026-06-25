@@ -62,13 +62,11 @@ namespace StateMachinePlayer
             if (isFallCrouch && playerController.isGrounding && !isLanding)
             {
                 _animator.Play(CrouchHash, 0, 0f);
-                playerController.Landing();
                 isLanding = true;
             }
             if (playerController.isGrounding && !isLanding)
             {
                 _animator.Play(LandingHash, 0, 0f);
-                playerController.Landing();
                 isLanding = true;
             }
             AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);

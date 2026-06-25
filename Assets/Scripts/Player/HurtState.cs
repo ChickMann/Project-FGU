@@ -21,10 +21,6 @@ namespace StateMachinePlayer
             _animator = animator;
             _animator.Play(HurtHash, 0, 0f);
             playerController.playerSliderBar.hurtDame();
-            if (playerController.hurtFeedback != null)
-            {
-                playerController.hurtFeedback.PlayFeedbacks();
-            }
             
         }
 
@@ -59,6 +55,7 @@ namespace StateMachinePlayer
 
         public void Exit()
         {
+            playerController.disableHurt();
         }
     }
 }

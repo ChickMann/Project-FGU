@@ -38,9 +38,14 @@ namespace StateMachinePlayer
 
             playerController.CheckDirectionToFace();
 
-            if (playerController.wasJumpPressed || !playerController.isGrounding)
+            if (playerController.wasJumpPressed && playerController.isGrounding)
             {
                 context.ChangeState(context.Jump);
+                return;
+            }
+            if (!playerController.isGrounding)
+            {
+                context.ChangeState(context.Fall);
                 return;
             }
             if (playerController.wasDodgePressed)
@@ -50,28 +55,25 @@ namespace StateMachinePlayer
             }
             if (playerController.wasParryPressed)
             {
-                playerController.RunStop();
                 context.ChangeState(context.Parry);
                 return;
             }
             if (playerController.wasAttackPressed)
             {
-                playerController.RunStop();
                 context.ChangeState(context.Attack);
                 return;
             }
             if (playerController.wasPunchPresssed)
             {
-                playerController.RunStop();
                 context.ChangeState(context.Punch);
                 return;
             }
             if (playerController.isCrouching)
             {
-                playerController.RunStop();
                 context.ChangeState(context.Crouch);
                 return;
             }
+            
             if (playerController._moveDirectionX == 0 || !playerController.isRunning || playerController.isReversingDirection)
             {
                 context.ChangeState(context.RunStop);

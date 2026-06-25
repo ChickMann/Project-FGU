@@ -20,10 +20,6 @@ namespace StateMachinePlayer
         {
             _animator = animator;
             _animator.Play(DeathHash, 0, 0f);
-            if (playerController.deathFeedback != null)
-            {
-                playerController.deathFeedback.PlayFeedbacks();
-            }
         }
 
         public void Execute()

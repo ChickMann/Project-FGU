@@ -14,11 +14,11 @@ public class PrototypeHero : MonoBehaviour {
     private Animator            m_animator;
     private Rigidbody2D         m_body2d;
     private SpriteRenderer      m_SR;
-    private Sensor_Prototype    m_groundSensor;
-    private Sensor_Prototype    m_wallSensorR1;
-    private Sensor_Prototype    m_wallSensorR2;
-    private Sensor_Prototype    m_wallSensorL1;
-    private Sensor_Prototype    m_wallSensorL2;
+    private Sensor    m_groundSensor;
+    private Sensor    m_wallSensorR1;
+    private Sensor    m_wallSensorR2;
+    private Sensor    m_wallSensorL1;
+    private Sensor    m_wallSensorL2;
     private bool                m_grounded = false;
     private bool                m_moving = false;
     private bool                m_dead = false;
@@ -46,11 +46,11 @@ public class PrototypeHero : MonoBehaviour {
         m_SR = GetComponentInChildren<SpriteRenderer>();
         m_gravity = m_body2d.gravityScale;
 
-        m_groundSensor = transform.Find("GroundSensor").GetComponent<Sensor_Prototype>();
-        m_wallSensorR1 = transform.Find("WallSensor_R1").GetComponent<Sensor_Prototype>();
-        m_wallSensorR2 = transform.Find("WallSensor_R2").GetComponent<Sensor_Prototype>();
-        m_wallSensorL1 = transform.Find("WallSensor_L1").GetComponent<Sensor_Prototype>();
-        m_wallSensorL2 = transform.Find("WallSensor_L2").GetComponent<Sensor_Prototype>();
+        m_groundSensor = transform.Find("GroundSensor").GetComponent<Sensor>();
+        m_wallSensorR1 = transform.Find("WallSensor_R1").GetComponent<Sensor>();
+        m_wallSensorR2 = transform.Find("WallSensor_R2").GetComponent<Sensor>();
+        m_wallSensorL1 = transform.Find("WallSensor_L1").GetComponent<Sensor>();
+        m_wallSensorL2 = transform.Find("WallSensor_L2").GetComponent<Sensor>();
     }
 
     // Update is called once per frame

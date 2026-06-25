@@ -21,7 +21,6 @@ namespace StateMachinePlayer
         {
             _animator = animator;
             _animator.Play(DodgeHash, 0, 0f);
-            playerController.DodgeEffect(); 
             playerController.playerSliderBar.dogdeStamina();
         }
 

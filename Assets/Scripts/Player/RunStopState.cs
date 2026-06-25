@@ -21,7 +21,6 @@ namespace StateMachinePlayer
         {
             _animator = animator;
             _animator.Play(RunStopHash, 0, 0f);
-                playerController.RunStop();
             
         }
 

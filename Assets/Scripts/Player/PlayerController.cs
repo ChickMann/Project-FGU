@@ -17,45 +17,15 @@ public class PlayerController : MonoBehaviour
     public InputActionReference _parryAction;
     public InputActionReference _attackAction;
     public InputActionReference _hurtAction;
-    public InputActionReference _deathAction;
     public InputActionReference _punchAction;
     public InputActionReference _heavyAttackAction;
     
     [Header("MM_Effect")]
-    public MMF_Player parryFeedback;
-    public MMF_Player attackFeedback;
-    public MMF_Player hurtFeedback;
-    public MMF_Player deathFeedback;
-    public MMF_Player dodgeFeedback;
-    public MMF_Player sheathSwordFeedback;
-    public MMF_Player footstepFeedback;
-    public MMF_Player parryStandFeedback;
+    public PlayerFeedbackManager  playerFeedbackManager {get; private set;}
     
-    [Header("sensors")]
-    public Sensor_Prototype _groundSensor;
-    public Sensor_Prototype _wallSensorR1;
-    public Sensor_Prototype _wallSensorR2;
-    public Sensor_Prototype _wallSensorL1;
-    public Sensor_Prototype _wallSensorL2;
-    
-    [Header("Parry Effect")]
-    public GameObject parryEffect;
-    public GameObject transitionEffect;
-    
-    [Header("Landing Effect")]
-    public GameObject landingEffect;
-    public GameObject landingPos;
-    
-    [Header("Jump Effect")]
-    public GameObject jumpEffect;
-
-    [Header("Run stop Effect")]
-    public GameObject runStopEffect;
-    public GameObject runStopPos;
-    
-    [Header("Dodge Effect")]
-    public GameObject dodgeEffect;
-    public GameObject dodgePos;
+    [Header("Sensors")]
+    public PlayerSensorManager playerSensorManager;
+  
 
     [Header("Player Stats")] 
     public PlayerData data;
@@ -67,7 +37,6 @@ public class PlayerController : MonoBehaviour
     public float LastPressedPunchTime { get; private set; }
     public float LastPressedParryTime { get; private set; }
     public float LastPressedDogdeTime { get; private set; }
-    public float LastPressedCrounchTime { get; private set; }
     private float _dogdeCooldownTime;
     private float _parryCooldownTime;
     private float _attackCooldownTime;
@@ -116,6 +85,10 @@ public class PlayerController : MonoBehaviour
     {
         _rigidbody = GetComponent<Rigidbody2D>();
         playerSliderBar = GetComponent<PlayerSliderBar>();
+        playerFeedbackManager   = GetComponent<PlayerFeedbackManager>();
+        
+        if (playerSensorManager == null)
+            playerSensorManager = GetComponent<PlayerSensorManager>();
     }
 
     private void Start()
@@ -156,7 +129,11 @@ public class PlayerController : MonoBehaviour
         LastPressedAttackTime -= Time.deltaTime;
         LastPressedPunchTime -= Time.deltaTime;
         LastPressedDogdeTime -= Time.deltaTime;
-        LastPressedParryTime -= Time.deltaTime;
+        LastPressedParryTime -= Time.unscaledDeltaTime;
+        if (_timeHurtRecover >= 0)
+        {
+            _timeHurtRecover -= Time.unscaledDeltaTime;
+        }
 
         isFocus = _heavyAttackAction.action.IsPressed();
         isHeavyAttack = _heavyAttackAction.action.WasReleasedThisFrame();
@@ -170,13 +147,14 @@ public class PlayerController : MonoBehaviour
         wasAttackPressed = OnAttackInput();
         isFalling = IsFalling();
         isWallSliding = IsWallSliding();
+        wasPunchPresssed = OnPunchInput();
+        
         isReversingDirection = _moveDirectionX * _lastNonZeroInputX < 0f;
         if (_moveDirectionX != 0)
         {
             _lastNonZeroInputX = _moveDirectionX;
         }
 
-        wasPunchPresssed = OnPunchInput();
 
         if (isFalling) isJumping = false;
         JumpCut();
@@ -190,16 +168,18 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Hit Box") && !wasHurted)
+        if (other.gameObject.CompareTag("Hit Box") && !RecoverHurt())
         {
-             if (other.GetComponent<HitBox>().isHeavyAttack)
+             if (other.GetComponent<HitBox>().isHeavyAttack )
             {
                 wasHurtedHeavyAttack = true;
                 wasHurted = true;
+                _timeHurtRecover = data.timeRecover;
             }
             else
             {
                 wasHurted = true;
+                _timeHurtRecover = data.timeRecover;
             }
 
             // Werewolf V2 life steal logic (recovers 2% max health on hit)
@@ -253,11 +233,13 @@ public class PlayerController : MonoBehaviour
 
     public bool IsWallSliding()
     {
-        return _wallSensorR1.State();
+        if (playerSensorManager == null || playerSensorManager.wallSensorR1 == null) return false;
+        return playerSensorManager.wallSensorR1.State();
     }
 
     public void WallSliding()
     {
+        
         float slideSpeed = isCrouching ? data.slideSpeedFaster : _jumpAction.action.IsPressed()? data.slideSpeedLower : data.slideSpeed;
         
         float speedDif = slideSpeed - _rigidbody.linearVelocity.y;	
@@ -289,7 +271,8 @@ public class PlayerController : MonoBehaviour
 
     private bool IsGrabbing()
     {
-        return _wallSensorR2.State() || _wallSensorR1.State() || _wallSensorL2.State() || _wallSensorL1.State();
+        if (playerSensorManager == null) return false;
+        return playerSensorManager.wallSensorR2.State() || playerSensorManager.wallSensorR1.State() || playerSensorManager.wallSensorL2.State() || playerSensorManager.wallSensorL1.State();
     }
 
     public void Jumping()
@@ -299,14 +282,13 @@ public class PlayerController : MonoBehaviour
             LastPressedJumpTime = 0;
             LastOnGroundTime = 0;
             isJumpCut = false;
-            Instantiate(jumpEffect, landingPos.transform.position, Quaternion.identity);
             float force = data.jumpForce;
             if (_rigidbody.linearVelocity.y < 0)
                 force -= _rigidbody.linearVelocity.y;
         
             _rigidbody.AddForce(Vector2.up * force, ForceMode2D.Impulse);
             isFalling = false;
-            _groundSensor.Disable(0.2f);
+            if (playerSensorManager != null) playerSensorManager.groundSensor.Disable(0.2f);
         }
     }
 
@@ -444,14 +426,9 @@ public class PlayerController : MonoBehaviour
 
     public void Parrying()
     {
-        if (parryFeedback !=null)
-        {
-            parryFeedback.PlayFeedbacks();
-        }
         successfulParryCount++;
         _rigidbody.linearVelocity = new Vector2(-facingDirection * data.parryForce, 0);
         _parryCooldownTime = data.parryMulCooldownTime;
-        if (parryEffect != null ) Instantiate(parryEffect, transitionEffect.transform.position, Quaternion.identity);
     }
 
     public void ResetSuccessfulParryCount()
@@ -471,52 +448,43 @@ public class PlayerController : MonoBehaviour
         _rigidbody.linearVelocity = new Vector2(0,_rigidbody.linearVelocity.y);
     }
 
-    private void RecoverHurt()
+    private bool RecoverHurt()
     {
-        if(!wasHurted && !wasHurtedHeavyAttack) return;
-        _timeHurtRecover -= Time.deltaTime;
+
         if (_timeHurtRecover <= 0)
         {
-            _timeHurtRecover = data.timeRecover;
-            wasHurted = false;
-            wasHurtedHeavyAttack = false;
+            return false;
         }
+        return true;
+    }
+
+    public void disableHurt()
+    {
+        wasHurted = false;
+        wasHurtedHeavyAttack = false;
     }
 
     #endregion
 
     #region Visual Effects
 
-    public void DodgeEffect()
-    {
-        if (dodgeFeedback != null)
-        {
-            dodgeFeedback.PlayFeedbacks();
-        }
-        Instantiate(dodgeEffect, dodgePos.transform.position, Quaternion.identity);
-    }
-
-    public void Landing()
-    {
-        if(landingEffect != null && isGrounding) Instantiate(landingEffect, landingPos.transform.position, Quaternion.identity);
-    }
-    
     public void RunStop()
     {
-        if (runStopEffect != null )
+        if (playerFeedbackManager != null )
         {
-            GameObject ef;
-            ef = Instantiate(runStopEffect, runStopPos.transform.position, Quaternion.identity);
+            playerFeedbackManager.PlayFeedback(PlayerFeedbackType.Run_Stop);
+             MMF_InstantiateObject instantiateFeedback = playerFeedbackManager.GetFeedback(PlayerFeedbackType.Run_Stop).GetFeedbackOfType<MMF_InstantiateObject>();
             if (wasParryPressed && facingDirection >0)
             {
-                ef.transform.position += new Vector3(0.2f, 0,0);
+                instantiateFeedback.PositionOffset += new Vector3(0.2f, 0,0);
             } else if (wasParryPressed && facingDirection < 0)
             {
-                ef.transform.position -=new Vector3(0.2f, 0,0);
+                instantiateFeedback.PositionOffset -=new Vector3(0.2f, 0,0);
             }
-            Vector3 scale = ef.transform.localScale; 
-            scale.x *= facingDirection;
-            ef.transform.localScale = scale;
+
+            Vector3 scale =  instantiateFeedback.GameObjectToInstantiate.transform.localScale;
+              scale.x = MathF.Abs(scale.x) * -facingDirection;
+            instantiateFeedback.GameObjectToInstantiate.transform.localScale = scale;
         }
     }
 
@@ -531,7 +499,7 @@ public class PlayerController : MonoBehaviour
 
     private bool IsGrounded()
     {
-        if (_groundSensor.State())
+        if (playerSensorManager != null && playerSensorManager.groundSensor.State())
         {
             LastOnGroundTime = data.coyoteTime;
             isJumpCut = false;
@@ -552,11 +520,12 @@ public class PlayerController : MonoBehaviour
     {
         if (isGrabbing)
         {
+         
             Vector3 rayStart;
             if (facingDirection == 1)
-                rayStart = _wallSensorR2.transform.position + new Vector3(0.2f, 0.0f, 0.0f);
+                rayStart = playerSensorManager.wallSensorR2.transform.position + new Vector3(0.2f, 0.0f, 0.0f);
             else
-                rayStart = _wallSensorL2.transform.position - new Vector3(0.6f, 0.0f, 0.0f);
+                rayStart = playerSensorManager.wallSensorL2.transform.position - new Vector3(0.6f, 0.0f, 0.0f);
 
             var hit = Physics2D.Raycast(rayStart, Vector2.down, 1.0f);
             if (hit)
@@ -569,12 +538,17 @@ public class PlayerController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        if (_wallSensorR2 != null && _wallSensorL2 != null)
+        if (!Application.isPlaying && playerSensorManager == null)
+            playerSensorManager = GetComponent<PlayerSensorManager>();
+            
+        if (playerSensorManager == null) return;
+
+        if (playerSensorManager.wallSensorR2 != null && playerSensorManager.wallSensorL2 != null)
         {
             if (facingDirection == 1)
             {
                 // Right side raycast check & visualization
-                Vector3 rightRayStart = _wallSensorR2.transform.position + new Vector3(0.2f, 0.0f, 0.0f);
+                Vector3 rightRayStart = playerSensorManager.wallSensorR2.transform.position + new Vector3(0.2f, 0.0f, 0.0f);
                 var rightHit = Physics2D.Raycast(rightRayStart, Vector2.down, 1.0f);
                 bool rightLedgeDetected = rightHit && rightHit.transform.GetComponent<GrabableLedge>() != null;
 
@@ -585,7 +559,7 @@ public class PlayerController : MonoBehaviour
             else if  (facingDirection == -1)
             {
                 // Left side raycast check & visualization
-                Vector3 leftRayStart = _wallSensorL2.transform.position - new Vector3(0.6f, 0.0f, 0.0f);
+                Vector3 leftRayStart = playerSensorManager.wallSensorL2.transform.position - new Vector3(0.6f, 0.0f, 0.0f);
                 var leftHit = Physics2D.Raycast(leftRayStart, Vector2.down, 1.0f);
                 bool leftLedgeDetected = leftHit && leftHit.transform.GetComponent<GrabableLedge>() != null;
 
@@ -602,26 +576,27 @@ public class PlayerController : MonoBehaviour
     {
         transform.position = climbPosition;
         SetGravityScale(data.gravityScale);
-        _wallSensorR1.Disable(3.0f / 14.0f);
-        _wallSensorR2.Disable(3.0f / 14.0f);
-        _wallSensorL1.Disable(3.0f / 14.0f);
-        _wallSensorL2.Disable(3.0f / 14.0f);
+        if (playerSensorManager != null)
+        {
+            playerSensorManager.wallSensorR1.Disable(3.0f / 14.0f);
+            playerSensorManager.wallSensorR2.Disable(3.0f / 14.0f);
+            playerSensorManager.wallSensorL1.Disable(3.0f / 14.0f);
+            playerSensorManager.wallSensorL2.Disable(3.0f / 14.0f);
+        }
     }
 
     public void DisableWallSensors()
     {
-        _wallSensorR1.Disable(0.8f);
-        _wallSensorR2.Disable(0.8f);
-        _wallSensorL1.Disable(0.8f);
-        _wallSensorL2.Disable(0.8f);
+        if (playerSensorManager != null)
+        {
+            playerSensorManager.wallSensorR1.Disable(0.8f);
+            playerSensorManager.wallSensorR2.Disable(0.8f);
+            playerSensorManager.wallSensorL1.Disable(0.8f);
+            playerSensorManager.wallSensorL2.Disable(0.8f);
+        }
         SetGravityScale(data.gravityScale);
     }
 
-    // Animation Event receiver called by Unity's Animator
-    public void AE_setPositionToClimbPosition()
-    {
-        SetPositionToClimbPosition();
-    }
 
     #endregion
 }
