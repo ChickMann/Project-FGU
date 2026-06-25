@@ -79,6 +79,11 @@ namespace StateMachinePlayer
                 context.ChangeState(context.RunStop);
                 return;
             }
+            if (playerController.isWallSliding && !playerController.isGrounding )
+            {
+                context.ChangeState(context.WallSlide);
+                return;
+            }
         }
 
         public void FixedExecute()

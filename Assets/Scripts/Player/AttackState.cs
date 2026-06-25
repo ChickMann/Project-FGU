@@ -10,7 +10,6 @@ namespace StateMachinePlayer
         private static readonly int Attack1HoldHash = Animator.StringToHash("Attack1Hold");
         private static readonly int Attack2HoldHash = Animator.StringToHash("Attack2Hold");
         private static readonly int AttackUpHoldHash = Animator.StringToHash("AttackUpHold");
-        private static readonly int SheathSwordHash = Animator.StringToHash("SheathSword");
         private Animator _animator;
 
         private PlayerStateManager context;
@@ -95,15 +94,9 @@ namespace StateMachinePlayer
 
                 if (animState.normalizedTime >= 1.0f)
                 {
-                    if(playerController.playerFeedbackManager !=null) playerController.playerFeedbackManager.PlayFeedback(PlayerFeedbackType.SheathSword);
-                    _animator.Play(SheathSwordHash, 0, 0f);
+                    context.ChangeState(context.SheathSword);
+                    return;
                 }
-            }
-
-            if (animState.shortNameHash == SheathSwordHash && animState.normalizedTime >= 1.0f)
-            {
-                context.ChangeState(context.Idle);
-                return;
             }
         }
 

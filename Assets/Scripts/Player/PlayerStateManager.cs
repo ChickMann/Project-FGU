@@ -28,6 +28,7 @@ namespace StateMachinePlayer
         public WallSlideState WallSlide { get; private set; }
         public GrabLedgeState GrabLedge { get; private set; }
         public LedgeClimbState LedgeClimb { get; private set; }
+        public SheathSwordState SheathSword { get; private set; }
         
         public PlayerController playerController;
 
@@ -56,6 +57,7 @@ namespace StateMachinePlayer
             Focus = new FocusState(this,playerController);
             GrabLedge = new GrabLedgeState(this,playerController);
             LedgeClimb = new LedgeClimbState(this,playerController);
+            SheathSword = new SheathSwordState(this,playerController);
         }
 
         private void Start()

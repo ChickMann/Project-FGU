@@ -130,10 +130,6 @@ public class PlayerController : MonoBehaviour
         LastPressedPunchTime -= Time.deltaTime;
         LastPressedDogdeTime -= Time.deltaTime;
         LastPressedParryTime -= Time.unscaledDeltaTime;
-        if (_timeHurtRecover >= 0)
-        {
-            _timeHurtRecover -= Time.unscaledDeltaTime;
-        }
 
         isFocus = _heavyAttackAction.action.IsPressed();
         isHeavyAttack = _heavyAttackAction.action.WasReleasedThisFrame();
@@ -168,7 +164,7 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.gameObject.CompareTag("Hit Box") && !RecoverHurt())
+        if (other.gameObject.CompareTag("Hit Box") && !IsInvincible())
         {
              if (other.GetComponent<HitBox>().isHeavyAttack )
             {
@@ -429,6 +425,7 @@ public class PlayerController : MonoBehaviour
         successfulParryCount++;
         _rigidbody.linearVelocity = new Vector2(-facingDirection * data.parryForce, 0);
         _parryCooldownTime = data.parryMulCooldownTime;
+        wasHurted = false;
     }
 
     public void ResetSuccessfulParryCount()
@@ -448,14 +445,17 @@ public class PlayerController : MonoBehaviour
         _rigidbody.linearVelocity = new Vector2(0,_rigidbody.linearVelocity.y);
     }
 
-    private bool RecoverHurt()
+    private void RecoverHurt()
     {
-
-        if (_timeHurtRecover <= 0)
+        if (_timeHurtRecover > 0)
         {
-            return false;
+            _timeHurtRecover -= Time.deltaTime;
         }
-        return true;
+    }
+
+    private bool IsInvincible()
+    {
+        return _timeHurtRecover > 0;
     }
 
     public void disableHurt()

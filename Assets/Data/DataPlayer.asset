@@ -40,7 +40,6 @@ MonoBehaviour:
   wallJumpForce: {x: 0, y: 0}
   wallJumpRunLerp: 0
   wallJumpTime: 0
-  doTurnOnWallJump: 0
   slideSpeed: -3
   slideAccel: 5
   slideSpeedFaster: -10
@@ -58,7 +57,7 @@ MonoBehaviour:
   attackCooldownTime: 0.3
   hurtForce: 2
   PunchCooldownTime: 1.4
-  timeRecover: 0.03
+  timeRecover: 0.3
   parryForce: 8
   parryCooldownTime: 0.8
   parryMulCooldownTime: 0.05

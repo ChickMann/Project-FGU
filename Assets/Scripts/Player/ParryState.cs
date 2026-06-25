@@ -5,7 +5,6 @@ namespace StateMachinePlayer
     public class ParryState : IState
     {
         private static readonly int ParryStanceHash = Animator.StringToHash("ParryStance");
-        private static readonly int SheathSwordHash = Animator.StringToHash("SheathSword");
         private static readonly int ParryHash = Animator.StringToHash("Parry");
         private Animator _animator;
 
@@ -33,12 +32,7 @@ namespace StateMachinePlayer
                 context.ChangeState(context.Death);
                 return;
             }
-            if (playerController.wasHurtedHeavyAttack)
-            {
-                context.ChangeState(context.Hurt);
-                return;
-            }
-
+           
             AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
 
             if (animState.shortNameHash == ParryStanceHash && playerController.wasHurted && !playerController.wasHurtedHeavyAttack)
@@ -49,39 +43,14 @@ namespace StateMachinePlayer
 
             if (animState.shortNameHash == ParryStanceHash && animState.normalizedTime >= 1.0f)
             {
-                if(playerController.playerFeedbackManager !=null) playerController.playerFeedbackManager.PlayFeedback(PlayerFeedbackType.SheathSword);
-                _animator.Play(SheathSwordHash, 0, 0f);
+                context.ChangeState(context.SheathSword);
+                return;
             }
 
             if (animState.shortNameHash == ParryHash && animState.normalizedTime >= 1.0f)
             {
-                if(playerController.playerFeedbackManager !=null) playerController.playerFeedbackManager.PlayFeedback(PlayerFeedbackType.SheathSword);
-                _animator.Play(SheathSwordHash, 0, 0f);
-            }
-
-            if (animState.shortNameHash == SheathSwordHash)
-            {
-                if (playerController.wasHurted)
-                {
-                    context.ChangeState(context.Hurt);
-                    return;
-                }
-
-                if (playerController.wasParryPressed)
-                {
-                    context.ChangeState(context.Parry);
-                    return;
-                }
-                if (playerController.wasParryPressed)
-                {
-                    context.ChangeState(context.Attack);
-                    return;
-                }
-                if (animState.normalizedTime >= 1.0f)
-                {
-                    context.ChangeState(context.Idle);
-                    return;
-                }
+                context.ChangeState(context.SheathSword);
+                return;
             }
 
             if (animState.shortNameHash == ParryHash)
