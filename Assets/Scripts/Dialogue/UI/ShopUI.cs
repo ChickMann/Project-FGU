@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 using TMPro;
 
 namespace Assets.Scripts.Dialogue
 {
     // Xử lý LOẠI 3: shop. Mua hàng trừ Coins trong PlayerInventory.
+    // Mỗi dòng item dùng prefab có component ShopItemRow (icon + tên + giá + nút mua).
     public class ShopUI : MonoBehaviour
     {
         [Header("Panel shop")]
@@ -14,13 +16,13 @@ namespace Assets.Scripts.Dialogue
         public Button closeButton;
 
         [Header("Danh sách item")]
-        public Button shopItemPrefab;       // prefab 1 dòng item (TMP_Text con để hiện tên/giá)
+        public ShopItemRow shopItemPrefab;  // prefab dòng item (có component ShopItemRow)
         public Transform itemContainer;
 
         [Header("Tham chiếu")]
         public PlayerInventory inventory;   // kéo Player vào, hoặc tự tìm theo tag
 
-        private readonly List<Button> _spawned = new List<Button>();
+        private readonly List<GameObject> _spawned = new List<GameObject>();
         private DialogueManager _mgr;
 
         private void Start()
@@ -43,8 +45,11 @@ namespace Assets.Scripts.Dialogue
             if (_mgr != null) _mgr.OnShopOpen -= OpenShop;
         }
 
+        private bool _shopOpen;
+
         private void OpenShop(DialogueNode node)
         {
+            _shopOpen = true;
             if (shopPanel != null) shopPanel.SetActive(true);
             ClearItems();
             RefreshCoins();
@@ -52,11 +57,9 @@ namespace Assets.Scripts.Dialogue
             foreach (var item in node.shopItems)
             {
                 ShopItem captured = item;
-                Button b = Instantiate(shopItemPrefab, itemContainer);
-                var label = b.GetComponentInChildren<TMP_Text>();
-                if (label != null) label.text = $"{item.itemName} - {item.price} xu";
-                b.onClick.AddListener(() => TryBuy(captured));
-                _spawned.Add(b);
+                ShopItemRow row = Instantiate(shopItemPrefab, itemContainer);
+                row.Setup(captured, () => TryBuy(captured));
+                _spawned.Add(row.gameObject);
             }
         }
 
@@ -73,14 +76,14 @@ namespace Assets.Scripts.Dialogue
 
             switch (item.itemType)
             {
-                case ItemType.HealthPotion:
-                    inventory.potionCount += item.amount;
+                case ItemType.ItemTag:
+                    inventory.hasItem += item.amount;
                     break;
                 case ItemType.Key:
                     inventory.hasKey = true;
                     break;
                 case ItemType.Coin:
-                    inventory.Coins += item.amount; // hiếm khi dùng, để đủ case
+                    inventory.Coins += item.amount;
                     break;
             }
 
@@ -96,16 +99,28 @@ namespace Assets.Scripts.Dialogue
 
         private void CloseShop()
         {
+            _shopOpen = false;
             ClearItems();
             if (shopPanel != null) shopPanel.SetActive(false);
-            if (_mgr != null) _mgr.CloseShop();   // trả quyền điều khiển về DialogueManager
+            if (_mgr != null) _mgr.CloseShop();
         }
 
         private void ClearItems()
         {
-            foreach (var b in _spawned)
-                if (b != null) Destroy(b.gameObject);
+            foreach (var go in _spawned)
+                if (go != null) Destroy(go);
             _spawned.Clear();
         }
-    }
+    
+        private void Update()
+        {
+            if (!_shopOpen) return;
+            var kb = Keyboard.current;
+            if (kb != null && kb.escapeKey.wasPressedThisFrame)
+            {
+                CloseShop();
+            }
+        }
+
+}
 }

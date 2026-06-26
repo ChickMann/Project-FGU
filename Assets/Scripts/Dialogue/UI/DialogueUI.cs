@@ -1,28 +1,29 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 using TMPro;
 
 namespace Assets.Scripts.Dialogue
 {
     // Gắn vào 1 Canvas. Tự đăng ký nghe DialogueManager.
-    // Cần bạn kéo các tham chiếu UI trong Inspector (mô tả ở dưới cùng file).
+    // Điều khiển bàn phím: Space/Enter = tiếp (Line); phím 1-4 = chọn đáp án (Choice).
     public class DialogueUI : MonoBehaviour
     {
         [Header("Panel chung")]
-        public GameObject root;                 // panel cha, bật/tắt toàn bộ
+        public GameObject root;
 
         [Header("Khung thoại (Line + Choice)")]
         public GameObject linePanel;
         public TMP_Text speakerText;
         public TMP_Text bodyText;
         public Image portraitImage;
-        public Button continueButton;           // nút "tiếp" cho Line
+        public Button continueButton;
 
         [Header("Lựa chọn (Choice)")]
-        public GameObject choicePanel;          // chứa các nút lựa chọn
-        public Button choiceButtonPrefab;       // prefab 1 nút (có TMP_Text con)
-        public Transform choiceContainer;       // nơi spawn nút
+        public GameObject choicePanel;
+        public Button choiceButtonPrefab;
+        public Transform choiceContainer;
 
         [Header("Hiệu ứng đánh chữ")]
         public bool useTypewriter = true;
@@ -34,6 +35,10 @@ namespace Assets.Scripts.Dialogue
         private bool _typing;
         private float _typeTimer;
         private int _visibleChars;
+
+        // Theo dõi node hiện đang hiển thị để xử lý input bàn phím
+        private bool _onLine;       // đang ở 1 câu Line (cho phép Space/Enter)
+        private int _choiceCount;   // số lựa chọn hiện có (cho phép phím 1-N)
 
         private void Start()
         {
@@ -63,6 +68,9 @@ namespace Assets.Scripts.Dialogue
         // ===== LOẠI 1: Line =====
         private void ShowLine(DialogueNode node)
         {
+            _onLine = true;
+            _choiceCount = 0;
+
             if (root != null) root.SetActive(true);
             linePanel.SetActive(true);
             choicePanel.SetActive(false);
@@ -81,6 +89,9 @@ namespace Assets.Scripts.Dialogue
         // ===== LOẠI 2: Choice =====
         private void ShowChoices(DialogueNode node)
         {
+            _onLine = false;
+            _choiceCount = node.choices.Count;
+
             if (root != null) root.SetActive(true);
             linePanel.SetActive(true);
             choicePanel.SetActive(true);
@@ -91,7 +102,6 @@ namespace Assets.Scripts.Dialogue
                 portraitImage.gameObject.SetActive(node.portrait != null);
                 portraitImage.sprite = node.portrait;
             }
-            // Choice không cần nút "tiếp"
             if (continueButton != null) continueButton.gameObject.SetActive(false);
 
             SetText(node.text);
@@ -102,31 +112,40 @@ namespace Assets.Scripts.Dialogue
                 int captured = i;
                 Button b = Instantiate(choiceButtonPrefab, choiceContainer);
                 var label = b.GetComponentInChildren<TMP_Text>();
-                if (label != null) label.text = node.choices[i].text;
-                b.onClick.AddListener(() => _mgr.SelectChoice(captured));
+                // Thêm số thứ tự đầu mỗi đáp án để gợi ý phím bấm
+                if (label != null) label.text = $"{i + 1}. {node.choices[i].text}";
+                b.onClick.AddListener(() => SelectChoice(captured));
                 _spawnedChoices.Add(b);
             }
         }
 
-        // ===== LOẠI 3: Shop -> ẩn khung thoại, ShopUI tự xử lý =====
+        // ===== LOẠI 3: Shop =====
         private void HideAllForShop(DialogueNode node)
         {
+            _onLine = false;
+            _choiceCount = 0;
             if (linePanel != null) linePanel.SetActive(false);
             if (choicePanel != null) choicePanel.SetActive(false);
-            // root vẫn bật để ShopUI dùng chung canvas nếu muốn; tùy bạn
         }
 
         private void HideAll()
         {
+            _onLine = false;
+            _choiceCount = 0;
             ClearChoices();
             if (root != null) root.SetActive(false);
         }
 
         private void OnContinuePressed()
         {
-            // Nếu đang đánh chữ thì bấm lần 1 để hiện hết, lần 2 mới qua node
+            // Nếu đang đánh chữ: bấm lần 1 hiện hết chữ, lần 2 mới qua node
             if (_typing) { FinishTyping(); return; }
             _mgr.Advance();
+        }
+
+        private void SelectChoice(int index)
+        {
+            _mgr.SelectChoice(index);
         }
 
         private void ClearChoices()
@@ -161,15 +180,55 @@ namespace Assets.Scripts.Dialogue
 
         private void Update()
         {
-            if (!_typing || bodyText == null) return;
-            _typeTimer += Time.unscaledDeltaTime * charsPerSecond;
-            int target = Mathf.Min(_fullText.Length, Mathf.FloorToInt(_typeTimer));
-            if (target != _visibleChars)
+            // chạy hiệu ứng đánh chữ
+            if (_typing && bodyText != null)
             {
-                _visibleChars = target;
-                bodyText.maxVisibleCharacters = _visibleChars;
+                _typeTimer += Time.unscaledDeltaTime * charsPerSecond;
+                int target = Mathf.Min(_fullText.Length, Mathf.FloorToInt(_typeTimer));
+                if (target != _visibleChars)
+                {
+                    _visibleChars = target;
+                    bodyText.maxVisibleCharacters = _visibleChars;
+                }
+                if (_visibleChars >= _fullText.Length) _typing = false;
             }
-            if (_visibleChars >= _fullText.Length) _typing = false;
+
+            // ===== Điều khiển bàn phím =====
+            if (_mgr == null || !_mgr.IsRunning) return;
+            var kb = Keyboard.current;
+            if (kb == null) return;
+
+            // Esc -> thoát hẳn hội thoại (khi đang ở Line hoặc Choice)
+            if ((_onLine || _choiceCount > 0) && kb.escapeKey.wasPressedThisFrame)
+            {
+                _mgr.EndDialogue();
+                return;
+            }
+
+            // Space / Enter -> tiếp (chỉ khi đang ở Line)
+            if (_onLine)
+            {
+                if (kb.spaceKey.wasPressedThisFrame ||
+                    kb.enterKey.wasPressedThisFrame ||
+                    kb.numpadEnterKey.wasPressedThisFrame)
+                {
+                    OnContinuePressed();
+                    return;
+                }
+            }
+
+            // Phím số 1-4 -> chọn đáp án (chỉ khi đang ở Choice)
+            if (_choiceCount > 0)
+            {
+                if (_choiceCount >= 1 && (kb.digit1Key.wasPressedThisFrame || kb.numpad1Key.wasPressedThisFrame))
+                    SelectChoice(0);
+                else if (_choiceCount >= 2 && (kb.digit2Key.wasPressedThisFrame || kb.numpad2Key.wasPressedThisFrame))
+                    SelectChoice(1);
+                else if (_choiceCount >= 3 && (kb.digit3Key.wasPressedThisFrame || kb.numpad3Key.wasPressedThisFrame))
+                    SelectChoice(2);
+                else if (_choiceCount >= 4 && (kb.digit4Key.wasPressedThisFrame || kb.numpad4Key.wasPressedThisFrame))
+                    SelectChoice(3);
+            }
         }
     }
 }

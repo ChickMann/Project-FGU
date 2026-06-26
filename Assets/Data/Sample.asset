@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0a02582b1bd116f448680490cf84064c, type: 3}
+  m_Name: Sample
+  m_EditorClassIdentifier: Assembly-CSharp::Assets.Scripts.Dialogue.DialogueData
+  startNodeId: node_1
+  nodes:
+  - id: node_1
+    type: 0
+    speakerName: Trader
+    text: "\xE1dadadadasdadasdas"
+    portrait: {fileID: 0}
+    nextNodeId: node_2
+    choices: []
+    shopItems: []
+    afterShopNodeId: 
+  - id: node_2
+    type: 1
+    speakerName: 
+    text: 
+    portrait: {fileID: 0}
+    nextNodeId: 
+    choices:
+    - text: Shop
+      nextNodeId: node_shop
+    - text: End
+      nextNodeId: node_end
+    shopItems: []
+    afterShopNodeId: 
+  - id: node_shop
+    type: 2
+    speakerName: 
+    text: 
+    portrait: {fileID: 0}
+    nextNodeId: 
+    choices: []
+    shopItems:
+    - itemName: Leather
+      itemType: 0
+      price: 121
+      amount: 1
+      icon: {fileID: 0}
+    - itemName: Key
+      itemType: 2
+      price: 500
+      amount: 1
+      icon: {fileID: 0}
+    afterShopNodeId: node_end
+  - id: node_end
+    type: 0
+    speakerName: Trader
+    text: Good Luck
+    portrait: {fileID: 0}
+    nextNodeId: 
+    choices: []
+    shopItems: []
+    afterShopNodeId: 

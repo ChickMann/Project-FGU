@@ -3,20 +3,20 @@ using UnityEngine;
 
 namespace Assets.Scripts.Dialogue
 {
-    // Bộ điều khiển trung tâm: nhận DialogueData và chạy lần lượt từng node.
-    // UI chỉ cần lắng nghe các event dưới đây, không cần biết logic.
     public class DialogueManager : MonoBehaviour
     {
         public static DialogueManager Instance { get; private set; }
 
         [Header("Tùy chọn: khóa input người chơi khi đang nói chuyện")]
-        public PlayerController player;          // kéo Player vào (có thể để trống)
+        public MonoBehaviour player;   // kéo Player vào (có thể để trống) - chấp nhận mọi script
 
-        // ===== Events cho UI / Shop lắng nghe =====
-        public event Action<DialogueNode> OnLineShown;      // hiện 1 câu thoại
-        public event Action<DialogueNode> OnChoiceShown;    // hiện danh sách lựa chọn
-        public event Action<DialogueNode> OnShopOpen;       // mở shop
-        public event Action OnDialogueEnd;                  // kết thúc hội thoại
+        [Header("Bật log chẩn đoán")]
+        public bool debugLog = true;
+
+        public event Action<DialogueNode> OnLineShown;
+        public event Action<DialogueNode> OnChoiceShown;
+        public event Action<DialogueNode> OnShopOpen;
+        public event Action OnDialogueEnd;
 
         public bool IsRunning { get; private set; }
 
@@ -29,24 +29,36 @@ namespace Assets.Scripts.Dialogue
             Instance = this;
         }
 
-        // Gọi từ NPC để bắt đầu
         public void StartDialogue(DialogueData data)
         {
+            if (debugLog) Debug.Log($"[DM] StartDialogue. data={(data == null ? "NULL" : data.name)}, IsRunning={IsRunning}");
             if (IsRunning || data == null) return;
             _data = data;
             IsRunning = true;
-            if (player != null) player.enabled = false;  // tạm khóa di chuyển
-            GoToNode(_data.GetStartNode());
+            if (player != null) player.enabled = false;
+
+            var start = _data.GetStartNode();
+            if (debugLog)
+            {
+                if (start == null)
+                    Debug.LogError($"[DM] KHONG tim thay node bat dau! startNodeId='{_data.startNodeId}'. Kiem tra Id node co khop khong.");
+                else
+                    Debug.Log($"[DM] Node bat dau: id='{start.id}', type={start.type}. So nguoi nghe OnLineShown: {(OnLineShown == null ? 0 : OnLineShown.GetInvocationList().Length)}");
+            }
+            GoToNode(start);
         }
 
         private void GoToNode(DialogueNode node)
         {
             _current = node;
-            if (node == null) { EndDialogue(); return; }
+            if (node == null) { if (debugLog) Debug.Log("[DM] node=null -> ket thuc."); EndDialogue(); return; }
+
+            if (debugLog) Debug.Log($"[DM] GoToNode id='{node.id}', type={node.type}");
 
             switch (node.type)
             {
                 case NodeType.Line:
+                    if (OnLineShown == null && debugLog) Debug.LogWarning("[DM] OnLineShown KHONG co nguoi nghe (DialogueUI chua dang ky)!");
                     OnLineShown?.Invoke(node);
                     break;
                 case NodeType.Choice:
@@ -58,14 +70,12 @@ namespace Assets.Scripts.Dialogue
             }
         }
 
-        // UI gọi khi người chơi bấm "tiếp" trên 1 câu Line
         public void Advance()
         {
             if (!IsRunning || _current == null || _current.type != NodeType.Line) return;
             GoToNode(_data.GetNode(_current.nextNodeId));
         }
 
-        // UI gọi khi người chơi chọn 1 đáp án (Choice)
         public void SelectChoice(int index)
         {
             if (!IsRunning || _current == null || _current.type != NodeType.Choice) return;
@@ -73,7 +83,6 @@ namespace Assets.Scripts.Dialogue
             GoToNode(_data.GetNode(_current.choices[index].nextNodeId));
         }
 
-        // Shop UI gọi khi đóng shop
         public void CloseShop()
         {
             if (!IsRunning || _current == null || _current.type != NodeType.Shop) return;
@@ -85,7 +94,7 @@ namespace Assets.Scripts.Dialogue
             IsRunning = false;
             _current = null;
             _data = null;
-            if (player != null) player.enabled = true;   // mở lại di chuyển
+            if (player != null) player.enabled = true;
             OnDialogueEnd?.Invoke();
         }
     }
