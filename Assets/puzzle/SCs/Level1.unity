@@ -1602,7 +1602,6 @@ GameObject:
   - component: {fileID: 912383338}
   - component: {fileID: 912383337}
   - component: {fileID: 912383336}
-  - component: {fileID: 912383339}
   m_Layer: 0
   m_Name: Door
   m_TagString: Untagged
@@ -1756,28 +1755,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!95 &912383339
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 912383333}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 09a99fa8b8218844cad8181f8f259079, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &981422806
 GameObject:
   m_ObjectHideFlags: 0
@@ -2890,7 +2867,7 @@ SpriteRenderer:
   m_Size: {x: 1.88, y: 2.37}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_SpriteSortPoint: 0
 --- !u!4 &1673054986
 Transform:
@@ -2992,8 +2969,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c7e5ed036d12064cb7138819f0180a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerMovement
-  speed: 8
-  jumpForce: 20
 --- !u!114 &1673054990
 MonoBehaviour:
   m_ObjectHideFlags: 0
