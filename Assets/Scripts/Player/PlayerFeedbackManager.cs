@@ -14,7 +14,8 @@ public enum PlayerFeedbackType
     SheathSword,
     Wall_slide,
     Grab,
-    Run_Stop
+    Run_Stop,
+    Health
 }
 
 [System.Serializable]

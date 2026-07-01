@@ -92,6 +92,11 @@ public class PlayerSliderBar : MonoBehaviour
         DecreaseHealth(StatsData.hurtDame);
     }
 
+    public void HealthPotion()
+    {
+        IncreaseHealth(20);
+    }
+
     public void punchStamina()
     {
         DecreaseStamina(StatsData.punchStamina);

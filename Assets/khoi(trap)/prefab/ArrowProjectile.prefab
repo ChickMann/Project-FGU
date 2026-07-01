@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2960661612027435543}
   - component: {fileID: 6271618697214051004}
   - component: {fileID: -1876554471623216896}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: ArrowProjectile
   m_TagString: Hit Box
   m_Icon: {fileID: 0}

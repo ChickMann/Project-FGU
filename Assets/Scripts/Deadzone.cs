@@ -3,15 +3,13 @@ using UnityEngine;
 
 public class Deadzone : MonoBehaviour
 {
-    public Transform objectOther;
-    public Vector3 offset;
+    public GameObject spawnPoint;
     
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.tag == "Enemy")
+        if (other.gameObject.tag == "Player")
         {
-            GameObject enemy = other.gameObject;
-            enemy.transform.position = new Vector2(objectOther.transform.position.x + offset.x,enemy.transform.position.y) ;
+           other.gameObject.transform.position = spawnPoint.transform.position;
         }
     }
 

@@ -72,6 +72,7 @@ public class PlayerController : MonoBehaviour
     private float _dogdeTimeElapsed ;
     private float _timeHurtRecover;
     public Vector3 climbPosition { get; set; }
+    public LayerMask LayerMaskGrab;
     
     [Header("refs")]
     public Rigidbody2D _rigidbody { get; private set; }
@@ -178,13 +179,19 @@ public class PlayerController : MonoBehaviour
                 _timeHurtRecover = data.timeRecover;
             }
 
-            // Werewolf V2 life steal logic (recovers 2% max health on hit)
+            // recovers 2% max health on hit
             var werewolf = other.GetComponentInParent<WerewolfMovement>();
             if (werewolf != null && werewolf.wasTransitionedToV2)
             {
                 float healAmount = werewolf.slider.maxHealth * 0.02f;
                 werewolf.slider.IncreaseHealth(healAmount);
             }
+        }
+        else if (other.gameObject.CompareTag("Health potion") && playerSliderBar.currentHealth<=playerSliderBar.StatsData.maxHealth-20 )
+        {
+            playerFeedbackManager.PlayFeedback(PlayerFeedbackType.Health);
+            playerSliderBar.HealthPotion();
+            Destroy(other.gameObject);
         }
     }
 
@@ -520,14 +527,13 @@ public class PlayerController : MonoBehaviour
     {
         if (isGrabbing)
         {
-         
             Vector3 rayStart;
             if (facingDirection == 1)
                 rayStart = playerSensorManager.wallSensorR2.transform.position + new Vector3(0.2f, 0.0f, 0.0f);
             else
                 rayStart = playerSensorManager.wallSensorL2.transform.position - new Vector3(0.6f, 0.0f, 0.0f);
 
-            var hit = Physics2D.Raycast(rayStart, Vector2.down, 1.0f);
+            var hit = Physics2D.Raycast(rayStart, Vector2.down, 1.0f,LayerMaskGrab);
             if (hit)
             {
                 return hit.transform.GetComponent<GrabableLedge>();

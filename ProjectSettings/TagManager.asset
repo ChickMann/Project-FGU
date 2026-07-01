@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Hit Box
   - Enemy
+  - Health potion
+  - Deadzone
   layers:
   - Default
   - TransparentFX
@@ -13,16 +15,16 @@ TagManager:
   - Ground
   - Water
   - UI
-  - character
+  - 
   - Wall
   - player
   - enemy
   - hit box
-  - 
-  - 
-  - 
-  - 
-  - 
+  - zone camera
+  - ob
+  - Deadzone
+  - Ground Grab
+  - Item
   - 
   - 
   - 

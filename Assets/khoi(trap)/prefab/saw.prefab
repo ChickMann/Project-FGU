@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3234964243792100972}
   - component: {fileID: 5114877521764797005}
   - component: {fileID: 5471897926412208701}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: saw
   m_TagString: Hit Box
   m_Icon: {fileID: 0}
