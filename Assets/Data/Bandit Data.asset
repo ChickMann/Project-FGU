@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4b18db5533807e478285ba3da7d4229, type: 3}
+  m_Name: Bandit Data
+  m_EditorClassIdentifier: Assembly-CSharp::BanditData
+  gravityStrength: -37.5
+  gravityScale: 3.8226297
+  runMaxSpeed: 5
+  runAcceleration: 0.5
+  runAccelAmount: 5
+  runDecceleration: 1
+  runDeccelAmount: 10
+  accelInAir: 0.5
+  deccelInAir: 0.5
+  doConserveMomentum: 1
+  patrolSpeed: 2
+  patrolRange: 4
+  lineOfSightDistance: 6
+  detectionRange: 8
+  jumpTriggerDistance: 4
+  attackRange: 0.9
+  combatRange: 0.9
+  attackForce: 1
+  attackCooldown: 0.8
+  jumpForce: 15
+  jumpTimeToApex: 0.4
+  jumpHeight: 3
+  jumpHangTimeThreshold: 0.1
+  jumpHangAccelerationMult: 1.1
+  jumpHangMaxSpeedMult: 1.3
+  hurtForce: 3
+  timeRecover: 0.5

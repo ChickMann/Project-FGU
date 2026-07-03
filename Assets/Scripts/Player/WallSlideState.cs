@@ -22,6 +22,7 @@ namespace StateMachinePlayer
             _animator = animator;
             _animator.Play(WallSlideHash, 0, 0f);
             playerController.SetGravityScale(0);
+            playerController._rigidbody.linearVelocity = Vector2.zero;
         }
 
         public void Execute()

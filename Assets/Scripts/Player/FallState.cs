@@ -41,7 +41,6 @@ namespace StateMachinePlayer
             }
 
             var ledge = playerController.GetGrabableLedge();
-            Debug.Log(ledge);
             if (ledge != null)
             {
                 playerController.climbPosition = ledge.transform.position + new Vector3(ledge.topClimbPosition.x, ledge.topClimbPosition.y, 0);

@@ -56,7 +56,7 @@ MonoBehaviour:
   attackForce: 4
   attackCooldownTime: 0.3
   hurtForce: 2
-  PunchCooldownTime: 1.4
+  PunchCooldownTime: 3.2
   timeRecover: 0.3
   parryForce: 8
   parryCooldownTime: 0.8

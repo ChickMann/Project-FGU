@@ -24,13 +24,17 @@ namespace StateMachinePlayer
 
         public void Execute()
         {
-            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
-            if (animState.shortNameHash == DeathHash && animState.normalizedTime >= 1.0f && playerController._moveDirectionX !=0)
+            if (_animator == null)
             {
-                context.ChangeState(context.Walk);
+                UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
                 return;
             }
 
+            AnimatorStateInfo animState = _animator.GetCurrentAnimatorStateInfo(0);
+            if (animState.shortNameHash == DeathHash && animState.normalizedTime >= 1.0f)
+            {
+                UnityEngine.SceneManagement.SceneManager.LoadScene(UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex);
+            }
         }
 
         public void FixedExecute()

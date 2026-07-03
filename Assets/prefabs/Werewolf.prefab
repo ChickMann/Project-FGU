@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7377091434767211733}
   - component: {fileID: 38343448576168241}
   - component: {fileID: 3231136401678383819}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: GameObject (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -86,7 +86,7 @@ GameObject:
   - component: {fileID: 3693536592674627408}
   - component: {fileID: 6579737581435266121}
   - component: {fileID: 811456121368542380}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -160,7 +160,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4388966143293014956}
   - component: {fileID: 3573579158646843322}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: werewolf transver2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -286,6 +286,7 @@ MonoBehaviour:
   InScriptDrivenPause: 0
   FeedbacksList:
   - rid: 4697580208668016988
+  - rid: 4697580208668017011
   KeepPlayModeChanges: 0
   PerformanceMode: 0
   RestoreInitialValuesOnDisable: 0
@@ -450,6 +451,225 @@ MonoBehaviour:
         Velocity: {x: 3, y: 3, z: 0}
         ClearImpulseOnStop: 1
         DrawGizmos: 0
+    - rid: 4697580208668017011
+      type: {class: MMF_MMSoundManagerSound, ns: MoreMountains.Feedbacks, asm: MoreMountains.Tools}
+      data:
+        Active: 1
+        UniqueID: -1493503024
+        Label: MMSoundManager Sound
+        OriginalLabel: MMSoundManager Sound
+        ChannelMode: 0
+        Channel: 0
+        MMChannelDefinition: {fileID: 0}
+        Chance: 100
+        Timing:
+          TimescaleMode: 0
+          ExcludeFromHoldingPauses: 0
+          ContributeToTotalDuration: 1
+          InitialDelay: 0
+          CooldownDuration: 0
+          InterruptsOnStop: 1
+          NumberOfRepeats: 0
+          RepeatForever: 0
+          DelayBetweenRepeats: 1
+          PlayCount: 0
+          LimitPlayCount: 0
+          MaxPlayCount: 3
+          SetPlayCountToZeroOnReset: 0
+          MMFeedbacksDirectionCondition: 0
+          PlayDirection: 0
+          ConstantIntensity: 0
+          UseIntensityInterval: 0
+          IntensityIntervalMin: 0
+          IntensityIntervalMax: 0
+          Sequence: {fileID: 0}
+          TrackID: 0
+          Quantized: 0
+          TargetBPM: 120
+        AutomatedTargetAcquisition:
+          Mode: 0
+          ChildIndex: 0
+        RandomizeOutput: 0
+        RandomMultiplier: {x: 0.8, y: 1}
+        RandomizeDuration: 0
+        RandomDurationMultiplier: {x: 0.5, y: 2}
+        UseRange: 0
+        RangeDistance: 5
+        UseRangeFalloff: 0
+        RangeFalloff:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 1
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        RemapRangeFalloff: {x: 0, y: 1}
+        AutomaticShakerSetupButton:
+          ButtonText: Automatic Shaker Setup
+        Owner: {fileID: 3573579158646843322}
+        DebugActive: 0
+        Source: 0
+        Sfx: {fileID: 8300000, guid: 8f9043cad65e9994fbae8ace5921f4ca, type: 3}
+        AudioResourceToPlay: {fileID: 0}
+        RandomSfx: []
+        SequentialOrder: 0
+        SequentialOrderHoldLast: 0
+        SequentialOrderHoldCooldownDuration: 2
+        RandomUnique: 0
+        SoundDataSO: {fileID: 0}
+        MinVolume: 1
+        MaxVolume: 1
+        MinPitch: 1
+        MaxPitch: 1
+        MmSoundManagerTrack: 0
+        ID: 0
+        AudioGroup: {fileID: 0}
+        RecycleAudioSource: {fileID: 0}
+        Loop: 0
+        Persistent: 0
+        DoNotPlayIfClipAlreadyPlaying: 0
+        MaximumConcurrentInstances: 3
+        StopSoundOnFeedbackStop: 0
+        FadeIn: 0
+        FadeInInitialVolume: 0
+        FadeInDuration: 1
+        FadeInTween:
+          MMTweenDefinitionType: 0
+          MMTweenCurve: 9
+          Curve:
+            serializedVersion: 2
+            m_Curve:
+            - serializedVersion: 3
+              time: 0
+              value: 0
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            - serializedVersion: 3
+              time: 1
+              value: 1
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+          Initialized: 0
+          ConditionPropertyName: FadeIn
+          EnumConditionPropertyName: 
+          EnumConditions: 0000000000000000000000000000000000000000000000000000000000000000
+        FadeOutOnStop: 0
+        FadeOutDuration: 1
+        FadeOutTween:
+          MMTweenDefinitionType: 0
+          MMTweenCurve: 9
+          Curve:
+            serializedVersion: 2
+            m_Curve:
+            - serializedVersion: 3
+              time: 0
+              value: 0
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            - serializedVersion: 3
+              time: 1
+              value: 1
+              inSlope: 0
+              outSlope: 0
+              tangentMode: 0
+              weightedMode: 0
+              inWeight: 0
+              outWeight: 0
+            m_PreInfinity: 2
+            m_PostInfinity: 2
+            m_RotationOrder: 4
+          Initialized: 0
+          ConditionPropertyName: FadeOutOnStop
+          EnumConditionPropertyName: 
+          EnumConditions: 0000000000000000000000000000000000000000000000000000000000000000
+        SoloSingleTrack: 0
+        SoloAllTracks: 0
+        AutoUnSoloOnEnd: 0
+        PanStereo: 0
+        SpatialBlend: 0
+        AttachToTransform: {fileID: 0}
+        BypassEffects: 0
+        BypassListenerEffects: 0
+        BypassReverbZones: 0
+        Priority: 128
+        ReverbZoneMix: 1
+        PlaybackTime: {x: 0, y: 0}
+        PlaybackDuration: {x: 0, y: 0}
+        DopplerLevel: 1
+        Spread: 0
+        RolloffMode: 0
+        MinDistance: 1
+        MaxDistance: 500
+        UseCustomRolloffCurve: 0
+        CustomRolloffCurve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        UseSpatialBlendCurve: 0
+        SpatialBlendCurve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        UseReverbZoneMixCurve: 0
+        ReverbZoneMixCurve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        UseSpreadCurve: 0
+        SpreadCurve:
+          serializedVersion: 2
+          m_Curve: []
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        DrawGizmos: 0
+        GizmosCenter: {fileID: 0}
+        MinDistanceColor: {r: 0.37254903, g: 0.61960787, b: 0.627451, a: 1}
+        MaxDistanceColor: {r: 1, g: 0.27058825, b: 0, a: 1}
+        TestPlayButton:
+          ButtonText: Debug Play Sound
+        TestStopButton:
+          ButtonText: Debug Stop Sound
+        ResetSequentialIndexButton:
+          ButtonText: Reset Sequential Index
 --- !u!1 &2455707572878589697
 GameObject:
   m_ObjectHideFlags: 0
@@ -459,7 +679,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9014997689446911945}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -495,7 +715,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8935330107023045076}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: MM_Feedback
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -567,6 +787,7 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
+  isTrigger: 1
 --- !u!68 &9058104267771124617
 EdgeCollider2D:
   m_ObjectHideFlags: 0
@@ -597,7 +818,7 @@ EdgeCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -626,7 +847,8 @@ GameObject:
   - component: {fileID: 553718173342475547}
   - component: {fileID: 2818368494832938194}
   - component: {fileID: 5361406966729020944}
-  m_Layer: 0
+  - component: {fileID: 1347653285604253044}
+  m_Layer: 6
   m_Name: Werewolf
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -741,7 +963,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -833,7 +1055,7 @@ MonoBehaviour:
   data: {fileID: 11400000, guid: cb6912bcb7d3abd40baebda2260882e3, type: 2}
   target: {fileID: 0}
   slider: {fileID: 0}
-  _groundSensor: {fileID: 5203921795417773952}
+  werewolfSensorManager: {fileID: 0}
   isWalking: 0
   isRunning: 0
   isJumping: 0
@@ -869,6 +1091,19 @@ MonoBehaviour:
   healthBar: {fileID: 1036552910060915342}
   maxHealth: 50
   minHealth: 0
+--- !u!114 &1347653285604253044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4269535254075683570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 32cee1cd5f147554ea5496eb89e0e497, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WerewolfSensorManager
+  groundSensor: {fileID: 5203921795417773952}
 --- !u!1 &4526014148887766323
 GameObject:
   m_ObjectHideFlags: 0
@@ -880,7 +1115,7 @@ GameObject:
   - component: {fileID: 8882631287735685160}
   - component: {fileID: 5999616564642217308}
   - component: {fileID: 4362043514496024606}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -954,7 +1189,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6264359641035332046}
   - component: {fileID: 7305998280944548072}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: 'Ease Heatlh Slider '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1043,7 +1278,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6636127599702782314}
   - component: {fileID: 8475590188720905468}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Dead
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1454,7 +1689,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9092686518446281434}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1491,7 +1726,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2244975905623144379}
   - component: {fileID: 3667409624118417327}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: 'Heatlh Slider '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1581,7 +1816,7 @@ GameObject:
   - component: {fileID: 5628515563719436038}
   - component: {fileID: 581907573011015647}
   - component: {fileID: 8057012639934718373}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1659,7 +1894,7 @@ GameObject:
   - component: {fileID: 2181292509515141590}
   - component: {fileID: 3216134208921417140}
   - component: {fileID: 4775557267000658423}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Canvas (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1760,7 +1995,7 @@ GameObject:
   - component: {fileID: 3108117415528527258}
   - component: {fileID: 4883353114794800543}
   - component: {fileID: 5890101491618943761}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1835,7 +2070,7 @@ GameObject:
   - component: {fileID: 3320453203501085914}
   - component: {fileID: 6064554231943654238}
   - component: {fileID: 5115346019489065915}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1909,7 +2144,7 @@ GameObject:
   m_Component:
   - component: {fileID: 445209453773869344}
   - component: {fileID: 1036552910060915342}
-  m_Layer: 5
+  m_Layer: 6
   m_Name: health
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1964,7 +2199,7 @@ GameObject:
   - component: {fileID: 6321356306874703804}
   - component: {fileID: 1112523487906541686}
   - component: {fileID: 6670853086701308248}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Hit box
   m_TagString: Hit Box
   m_Icon: {fileID: 0}

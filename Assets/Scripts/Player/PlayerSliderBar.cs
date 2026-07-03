@@ -94,7 +94,7 @@ public class PlayerSliderBar : MonoBehaviour
 
     public void HealthPotion()
     {
-        IncreaseHealth(20);
+        IncreaseHealth(60);
     }
 
     public void punchStamina()

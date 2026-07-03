@@ -8,6 +8,7 @@ TagManager:
   - Enemy
   - Health potion
   - Deadzone
+  - Trigger boss
   layers:
   - Default
   - TransparentFX

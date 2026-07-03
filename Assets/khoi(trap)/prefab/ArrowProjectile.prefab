@@ -154,7 +154,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ArrowProjectile
   speed: 8
-  lifeTime: 3
+  lifeTime: 4
   direction: {x: 1, y: 0}
 --- !u!50 &6271618697214051004
 Rigidbody2D:

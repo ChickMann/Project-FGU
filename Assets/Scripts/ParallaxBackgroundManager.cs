@@ -38,17 +38,52 @@ public class ParallaxBackgroundManager : MonoBehaviour
         [Tooltip("Kích thước chiều cao thủ công (chỉ dùng khi tắt Auto Get Size)")]
         public float manualLengthY;
 
+        [Header("Tự động cuộn (Auto Scroll)")]
+        [Tooltip("Cho phép layer tự cuộn liên tục (ví dụ: mây bay, gió thổi)")]
+        public bool enableAutoScroll = false;
+
+        [Tooltip("Tốc độ tự cuộn theo trục X")]
+        public float autoScrollSpeedX = 0.1f;
+
+        [Tooltip("Tốc độ tự cuộn theo trục Y")]
+        public float autoScrollSpeedY = 0f;
+
+        [Tooltip("Mức độ ảnh hưởng của tốc độ Player lên tốc độ tự cuộn (ví dụ: 0.05)")]
+        [Range(0f, 1f)]
+        public float playerSpeedInfluenceX = 0.05f;
+
+        [Tooltip("Mức độ ảnh hưởng của tốc độ Player lên tốc độ tự cuộn")]
+        [Range(0f, 1f)]
+        public float playerSpeedInfluenceY = 0f;
+
         [HideInInspector] public float startPosX;
         [HideInInspector] public float startPosY;
         [HideInInspector] public float lengthX;
         [HideInInspector] public float lengthY;
         [HideInInspector] public float wrapOffsetX;
         [HideInInspector] public float wrapOffsetY;
+        [HideInInspector] public float autoScrollOffsetX;
+        [HideInInspector] public float autoScrollOffsetY;
+        [HideInInspector] public Vector3 smoothVelocity;
     }
 
     [Header("Camera Settings")]
     [Tooltip("Camera chính dùng để tính toán parallax. Nếu để trống, script sẽ tự động tìm Camera.main")]
     [SerializeField] private Transform cameraTransform;
+
+    [Header("Player & Physics Settings")]
+    [Tooltip("Rigidbody2D của Player để lấy tốc độ thực tế. Nếu để trống, script sẽ tự tìm.")]
+    [SerializeField] private Rigidbody2D playerRigidbody;
+
+    [Tooltip("Tốc độ tối đa tham chiếu của player để tính toán quán tính (ví dụ: tốc độ chạy tối đa của player)")]
+    [SerializeField] private float maxPlayerSpeedReference = 10f;
+
+    [Header("Smoothing (Inertia)")]
+    [Tooltip("Bật hiệu ứng chuyển động mượt mà / có quán tính cho nền")]
+    [SerializeField] private bool useSmoothing = true;
+
+    [Tooltip("Thời gian làm mượt cơ bản. Giá trị nhỏ = bám sát camera, lớn = nhiều quán tính/trễ hơn")]
+    [SerializeField] private float smoothTime = 0.15f;
 
     [Header("Background Layers Setup")]
     [Tooltip("Danh sách các layer nền parallax. Bạn có thể thêm, bớt và chỉnh sửa trực tiếp ở đây.")]
@@ -72,6 +107,27 @@ public class ParallaxBackgroundManager : MonoBehaviour
             }
         }
 
+        if (playerRigidbody == null)
+        {
+#if UNITY_2023_1_OR_NEWER
+            PlayerController playerController = FindAnyObjectByType<PlayerController>();
+#else
+            PlayerController playerController = FindObjectOfType<PlayerController>();
+#endif
+            if (playerController != null)
+            {
+                playerRigidbody = playerController.GetComponent<Rigidbody2D>();
+            }
+            else
+            {
+                GameObject playerObj = GameObject.FindGameObjectWithTag("Player");
+                if (playerObj != null)
+                {
+                    playerRigidbody = playerObj.GetComponent<Rigidbody2D>();
+                }
+            }
+        }
+
         startCameraPos = cameraTransform.position;
         InitializeLayers();
     }
@@ -89,6 +145,9 @@ public class ParallaxBackgroundManager : MonoBehaviour
             
             layer.wrapOffsetX = 0f;
             layer.wrapOffsetY = 0f;
+            layer.autoScrollOffsetX = 0f;
+            layer.autoScrollOffsetY = 0f;
+            layer.smoothVelocity = Vector3.zero;
 
             if (layer.autoGetSize)
             {
@@ -122,13 +181,28 @@ public class ParallaxBackgroundManager : MonoBehaviour
     {
         if (cameraTransform == null) return;
 
+        Vector2 playerVelocity = Vector2.zero;
+        if (playerRigidbody != null)
+        {
+            playerVelocity = playerRigidbody.linearVelocity;
+        }
+
         Vector3 cameraTravel = cameraTransform.position - startCameraPos;
 
         foreach (var layer in parallaxLayers)
         {
             if (layer.layerTransform == null) continue;
 
-            float relativeMovementX = cameraTravel.x * (1f - layer.parallaxSpeedX);
+            if (layer.enableAutoScroll)
+            {
+                float adjustedSpeedX = layer.autoScrollSpeedX - (playerVelocity.x * layer.playerSpeedInfluenceX);
+                float adjustedSpeedY = layer.autoScrollSpeedY - (playerVelocity.y * layer.playerSpeedInfluenceY);
+
+                layer.autoScrollOffsetX += adjustedSpeedX * Time.deltaTime;
+                layer.autoScrollOffsetY += adjustedSpeedY * Time.deltaTime;
+            }
+
+            float relativeMovementX = (cameraTravel.x * (1f - layer.parallaxSpeedX)) + layer.autoScrollOffsetX;
             
             if (layer.infiniteX && layer.lengthX > 0)
             {
@@ -142,9 +216,9 @@ public class ParallaxBackgroundManager : MonoBehaviour
                 }
             }
 
-            float targetX = layer.startPosX + (cameraTravel.x * layer.parallaxSpeedX) + layer.wrapOffsetX;
+            float targetX = layer.startPosX + (cameraTravel.x * layer.parallaxSpeedX) + layer.wrapOffsetX + layer.autoScrollOffsetX;
 
-            float relativeMovementY = cameraTravel.y * (1f - layer.parallaxSpeedY);
+            float relativeMovementY = (cameraTravel.y * (1f - layer.parallaxSpeedY)) + layer.autoScrollOffsetY;
 
             if (layer.infiniteY && layer.lengthY > 0)
             {
@@ -158,9 +232,28 @@ public class ParallaxBackgroundManager : MonoBehaviour
                 }
             }
 
-            float targetY = layer.startPosY + (cameraTravel.y * layer.parallaxSpeedY) + layer.wrapOffsetY;
+            float targetY = layer.startPosY + (cameraTravel.y * layer.parallaxSpeedY) + layer.wrapOffsetY + layer.autoScrollOffsetY;
 
-            layer.layerTransform.position = new Vector3(targetX, targetY, layer.layerTransform.position.z);
+            Vector3 targetPos = new Vector3(targetX, targetY, layer.layerTransform.position.z);
+
+            if (useSmoothing)
+            {
+                float playerSpeed = playerVelocity.magnitude;
+                float speedFactor = Mathf.Clamp01(playerSpeed / maxPlayerSpeedReference);
+                
+                float dynamicSmoothTime = Mathf.Lerp(smoothTime * 1.5f, smoothTime * 0.5f, speedFactor);
+
+                layer.layerTransform.position = Vector3.SmoothDamp(
+                    layer.layerTransform.position,
+                    targetPos,
+                    ref layer.smoothVelocity,
+                    dynamicSmoothTime
+                );
+            }
+            else
+            {
+                layer.layerTransform.position = targetPos;
+            }
         }
     }
 }
